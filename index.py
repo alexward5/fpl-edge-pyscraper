@@ -5,12 +5,10 @@ from bs4 import BeautifulSoup
 
 class FBRef_Table:
     def __init__(self, table_url, table_index):
-        self.table_url = table_url
-        self.table_html = requests.get(self.table_url).text
         self.table_headers = []
         self.table_rows = []
 
-        self._parse_table()
+        self._parse_table(table_url)
 
     def get_headers(self):
         return self.table_headers
@@ -18,8 +16,9 @@ class FBRef_Table:
     def get_rows(self):
         return self.table_rows
 
-    def _parse_table(self):
-        soup = BeautifulSoup(self.table_html, "html.parser")
+    def _parse_table(self, table_url):
+        table_html = requests.get(table_url).text
+        soup = BeautifulSoup(table_html, "html.parser")
 
         for row_num, tr in enumerate(soup.find("table").find_all("tr")):
             # Parse table headers into array of dicts
@@ -50,4 +49,4 @@ class FBRef_Table:
 
 
 my_table = FBRef_Table("https://fbref.com/en/comps/9/Premier-League-Stats", 0)
-pprint(my_table.get_rows())
+pprint(my_table.get_headers())
