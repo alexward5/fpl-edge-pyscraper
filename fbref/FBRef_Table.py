@@ -45,8 +45,17 @@ class FBRef_Table:
                     self.table_row_data.append(tr_dict)
 
 
+table_columns = list(
+    FBRef_Table(
+        "https://fbref.com/en/comps/9/Premier-League-Stats",
+    )
+    .table_row_data[1]
+    .keys()
+)
+
 pprint(
     FBRef_Table(
-        "https://fbref.com/en/squads/b8fd03ef/2023-2024/matchlogs/c9/schedule/Manchester-City-Scores-and-Fixtures-Premier-League",
-    ).table_row_data[1]
+        "https://fbref.com/en/comps/9/Premier-League-Stats",
+    ).table_row_data[1],
+    sort_dicts=False,
 )
