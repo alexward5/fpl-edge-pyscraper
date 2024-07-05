@@ -24,8 +24,8 @@ for row_num, tr in enumerate(soup.find("table").find_all("tr")):
     else:
         tr_dict = {}
         for td in tr.find_all("td"):
-            data_stat = td["data-stat"]
             tr_dict[data_stat] = td.text
+            data_stat = td["data-stat"]
 
             data_link = td.find("a")
             if data_link:
