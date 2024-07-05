@@ -35,10 +35,14 @@ class PG:
             self.conn.commit()
 
 
-PG("postgres", "postgres").create_schema("worst_schema_na")
+SCHEMA_NAME = "TEST_SCHEMA"
+TABLE_NAME = "TEST_TABLE"
+
+
+PG("postgres", "postgres").create_schema(SCHEMA_NAME)
 PG("postgres", "postgres").create_table(
-    "worst_schema_na",
-    "worst_table_na",
+    SCHEMA_NAME,
+    TABLE_NAME,
     [
         "user_id SERIAL PRIMARY KEY",
         "username VARCHAR (50) UNIQUE NOT NULL",
