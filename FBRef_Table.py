@@ -4,13 +4,13 @@ from bs4 import BeautifulSoup
 
 
 class FBRef_Table:
-    def __init__(self, table_url, table_index=0, header_row=0):
-        self.table_headers = []
-        self.table_row_data = []
+    def __init__(self, table_url: str, table_index: int = 0, header_row: int = 0):
+        self.table_headers: list = []
+        self.table_row_data: list = []
 
         self._parse_table(table_url, table_index, header_row)
 
-    def _parse_table(self, table_url, table_index, header_row):
+    def _parse_table(self, table_url: str, table_index: int, header_row: int):
         table_html = requests.get(table_url).text
         soup = BeautifulSoup(table_html, "html.parser")
 
