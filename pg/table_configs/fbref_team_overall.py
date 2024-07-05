@@ -9,7 +9,7 @@ fbref_team_overall = {
         "losses INT NOT NULL",
         "goals_for INT NOT NULL",
         "goals_against INT NOT NULL",
-        "goal_diff VARCHAR (255) NOT NULL",
+        "goal_diff INT NOT NULL",
         "points INT NOT NULL",
         "points_avg DECIMAL NOT NULL",
         "xg_for DECIMAL NOT NULL",
