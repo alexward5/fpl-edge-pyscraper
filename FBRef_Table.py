@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 
 class FBRef_Table:
-    def __init__(self, table_url, table_index, header_row):
+    def __init__(self, table_url, table_index=0, header_row=0):
         self.table_headers = []
         self.table_row_data = []
 
@@ -47,6 +47,6 @@ class FBRef_Table:
 
 pprint(
     FBRef_Table(
-        "https://fbref.com/en/comps/9/Premier-League-Stats", 1, 1
+        "https://fbref.com/en/squads/b8fd03ef/2023-2024/matchlogs/c9/schedule/Manchester-City-Scores-and-Fixtures-Premier-League",
     ).table_row_data[1]
 )
