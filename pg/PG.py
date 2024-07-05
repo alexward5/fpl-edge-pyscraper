@@ -1,5 +1,6 @@
 import psycopg
 from psycopg import sql
+from typing import Any
 
 
 class PG:
@@ -19,7 +20,7 @@ class PG:
 
             self.conn.commit()
 
-    def create_table(self, schema: str, table_name: str, columns: list[str]):
+    def create_table(self, schema: str, table_name: str, columns: list[Any]):
         with self.conn.cursor() as cur:
             cur.execute(
                 sql.SQL(
@@ -27,24 +28,17 @@ class PG:
                 ).format(
                     schema=sql.Identifier(schema),
                     table_name=sql.Identifier(table_name),
-                    columns=sql.SQL(
-                        ",".join(
-                            [
-                                "user_id SERIAL PRIMARY KEY",
-                                "username VARCHAR (50) UNIQUE NOT NULL",
-                            ]
-                        )
-                    ),
+                    columns=sql.SQL(",".join(columns)),
                 ),
             )
 
             self.conn.commit()
 
 
-PG("postgres", "postgres").create_schema("best_schema_na")
+PG("postgres", "postgres").create_schema("worst_schema_na")
 PG("postgres", "postgres").create_table(
-    "best_schema_na",
-    "best_table_na",
+    "worst_schema_na",
+    "worst_table_na",
     [
         "user_id SERIAL PRIMARY KEY",
         "username VARCHAR (50) UNIQUE NOT NULL",
