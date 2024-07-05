@@ -4,19 +4,21 @@ from bs4 import BeautifulSoup
 
 
 class FBRef_Table:
-    def __init__(self, table_url, table_index):
+    def __init__(self, table_url, table_index, header_row):
         self.table_headers = []
-        self.table_rows = []
+        self.table_row_data = []
 
-        self._parse_table(table_url)
+        self._parse_table(table_url, table_index, header_row)
 
-    def _parse_table(self, table_url):
+    def _parse_table(self, table_url, table_index, header_row):
         table_html = requests.get(table_url).text
         soup = BeautifulSoup(table_html, "html.parser")
 
-        for row_num, tr in enumerate(soup.find("table").find_all("tr")):
+        for row_num, tr in enumerate(
+            soup.find_all("table")[table_index].find_all("tr")
+        ):
             # Parse table header row into array of dicts
-            if row_num == 0:
+            if row_num == header_row:
                 for th in tr.find_all("th"):
                     self.table_headers.append(
                         {
@@ -26,7 +28,7 @@ class FBRef_Table:
                         }
                     )
             # Parse table data rows into array of dicts
-            else:
+            elif row_num > header_row:
                 tr_dict = {}
                 for td in tr.find_all("td"):
                     data_stat = td["data-stat"]
@@ -40,9 +42,11 @@ class FBRef_Table:
                         )
 
                 if tr_dict:
-                    self.table_rows.append(tr_dict)
+                    self.table_row_data.append(tr_dict)
 
 
 pprint(
-    FBRef_Table("https://fbref.com/en/comps/9/Premier-League-Stats", 0).table_headers
+    FBRef_Table(
+        "https://fbref.com/en/comps/9/Premier-League-Stats", 1, 1
+    ).table_row_data[1]
 )
