@@ -19,5 +19,34 @@ class PG:
 
             self.conn.commit()
 
+    def create_table(self, schema: str, table_name: str, columns: list[str]):
+        with self.conn.cursor() as cur:
+            cur.execute(
+                sql.SQL(
+                    "CREATE TABLE IF NOT EXISTS {schema}.{table_name} ({columns})"
+                ).format(
+                    schema=sql.Identifier(schema),
+                    table_name=sql.Identifier(table_name),
+                    columns=sql.SQL(
+                        ",".join(
+                            [
+                                "user_id SERIAL PRIMARY KEY",
+                                "username VARCHAR (50) UNIQUE NOT NULL",
+                            ]
+                        )
+                    ),
+                ),
+            )
 
-PG("postgres", "postgres").create_schema("best_table_na")
+            self.conn.commit()
+
+
+PG("postgres", "postgres").create_schema("best_schema_na")
+PG("postgres", "postgres").create_table(
+    "best_schema_na",
+    "best_table_na",
+    [
+        "user_id SERIAL PRIMARY KEY",
+        "username VARCHAR (50) UNIQUE NOT NULL",
+    ],
+)
