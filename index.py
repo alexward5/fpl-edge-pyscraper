@@ -10,18 +10,12 @@ class FBRef_Table:
 
         self._parse_table(table_url)
 
-    def get_headers(self):
-        return self.table_headers
-
-    def get_rows(self):
-        return self.table_rows
-
     def _parse_table(self, table_url):
         table_html = requests.get(table_url).text
         soup = BeautifulSoup(table_html, "html.parser")
 
         for row_num, tr in enumerate(soup.find("table").find_all("tr")):
-            # Parse table headers into array of dicts
+            # Parse table header row into array of dicts
             if row_num == 0:
                 for th in tr.find_all("th"):
                     self.table_headers.append(
@@ -31,13 +25,14 @@ class FBRef_Table:
                             "text": th.text,
                         }
                     )
-            # Parse table data into array of dicts
+            # Parse table data rows into array of dicts
             else:
                 tr_dict = {}
                 for td in tr.find_all("td"):
                     data_stat = td["data-stat"]
                     tr_dict[data_stat] = td.text
 
+                    # Add any hyperlinks in data cells to dict
                     data_link = td.find("a")
                     if data_link:
                         tr_dict[f"{data_stat}_url"] = (
@@ -48,5 +43,6 @@ class FBRef_Table:
                     self.table_rows.append(tr_dict)
 
 
-my_table = FBRef_Table("https://fbref.com/en/comps/9/Premier-League-Stats", 0)
-pprint(my_table.get_headers())
+pprint(
+    FBRef_Table("https://fbref.com/en/comps/9/Premier-League-Stats", 0).table_headers
+)
