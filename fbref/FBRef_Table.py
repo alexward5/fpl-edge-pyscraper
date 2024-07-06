@@ -1,5 +1,4 @@
 import requests
-from pprint import pprint
 from bs4 import BeautifulSoup
 
 
@@ -43,29 +42,3 @@ class FBRef_Table:
 
                 if tr_dict:
                     self.table_row_data.append(tr_dict)
-
-    def _set_data_type(self, value: str, data_type: str):
-        if data_type == "str":
-            return str(value)
-        elif data_type == "int":
-            return int(value)
-        elif data_type == "float":
-            return float(value)
-        else:
-            raise Exception("Unsupported data type found in config")
-
-
-table_columns = list(
-    FBRef_Table(
-        "https://fbref.com/en/comps/9/Premier-League-Stats",
-    )
-    .table_row_data[1]
-    .keys()
-)
-
-pprint(
-    FBRef_Table(
-        "https://fbref.com/en/comps/9/Premier-League-Stats",
-    ).table_row_data[1],
-    sort_dicts=False,
-)
