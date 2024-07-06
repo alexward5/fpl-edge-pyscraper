@@ -4,13 +4,13 @@ from bs4 import BeautifulSoup
 
 class FBRef_Table:
     def __init__(self, table_url: str, table_index: int = 0, header_row: int = 0):
-        self.table_headers: list = []
-        self.table_row_data: list = []
+        self.table_headers: list[dict] = []
+        self.table_rows: list[list[dict]] = []
 
         self._parse_table(table_url, table_index, header_row)
 
     def _parse_table(self, table_url: str, table_index: int, header_row: int):
-        table_html = requests.get(table_url).text
+        table_html: str = requests.get(table_url).text
         soup = BeautifulSoup(table_html, "html.parser")
 
         for row_num, tr in enumerate(
@@ -21,24 +21,27 @@ class FBRef_Table:
                 for th in tr.find_all("th"):
                     self.table_headers.append(
                         {
-                            "data-stat": th["data-stat"],
-                            "aria-label": th["aria-label"],
-                            "text": th.text,
+                            "data_stat": th["data-stat"],
+                            "aria_label": th["aria-label"],
+                            "text": th.text.strip(),
                         }
                     )
             # Parse table data rows into array of dicts
             elif row_num > header_row:
-                tr_dict = {}
+                tr_list: list[dict] = []
                 for td in tr.find_all("td"):
-                    data_stat = td["data-stat"]
-                    tr_dict[data_stat] = td.text
+                    cell_dict = {}
+                    cell_dict["data_stat"] = td["data-stat"]
+                    cell_dict["data_value"] = td.text.strip()
 
                     # Add any hyperlinks in data cells to dict
-                    data_link = td.find("a")
-                    if data_link:
-                        tr_dict[f"{data_stat}_url"] = (
-                            f'https://fbref.com{data_link["href"]}'
+                    cell_hyperlink = td.find("a")
+                    if cell_hyperlink:
+                        cell_dict["data_hyperlink"] = (
+                            f'https://fbref.com{cell_hyperlink["href"]}'
                         )
 
-                if tr_dict:
-                    self.table_row_data.append(tr_dict)
+                    tr_list.append(cell_dict)
+
+                if tr_list:
+                    self.table_rows.append(tr_list)
