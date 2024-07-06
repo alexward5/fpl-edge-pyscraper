@@ -21,5 +21,5 @@ pg.create_schema(SCHEMA_NAME)
 pg.create_table(
     schema=SCHEMA_NAME,
     table_name=TABLE_NAME,
-    columns=table_configs["table_column_sql"][TABLE_NAME],
+    columns=table_configs[TABLE_NAME]["table_column_sql"],
 )
