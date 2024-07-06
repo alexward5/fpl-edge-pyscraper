@@ -10,7 +10,7 @@ from pprint import pprint
 # )
 
 from pg.PG import PG
-from merged_table_configs import merged_table_configs
+from table_configs_merged import merged_table_configs
 
 SCHEMA_NAME = "TEST_SCHEMA"
 TABLE_NAME = "fbref_team_overall"
