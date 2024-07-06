@@ -1,4 +1,4 @@
-fbref_team_overall_data_types = {
+team_overall_data_types: dict[str, str] = {
     "team": "str",
     "team_url": "str",
     "games": "int",
