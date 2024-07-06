@@ -19,6 +19,7 @@ class PG:
             )
 
             self.conn.commit()
+            print(f"Created schema: {schema_name}")
 
     def create_table(self, schema: str, table_name: str, columns: list[Any]):
         with self.conn.cursor() as cur:
@@ -33,18 +34,4 @@ class PG:
             )
 
             self.conn.commit()
-
-
-SCHEMA_NAME = "TEST_SCHEMA"
-TABLE_NAME = "TEST_TABLE"
-
-
-PG("postgres", "postgres").create_schema(SCHEMA_NAME)
-PG("postgres", "postgres").create_table(
-    SCHEMA_NAME,
-    TABLE_NAME,
-    [
-        "user_id SERIAL PRIMARY KEY",
-        "username VARCHAR (50) UNIQUE NOT NULL",
-    ],
-)
+            print(f"Created table: {table_name}")
