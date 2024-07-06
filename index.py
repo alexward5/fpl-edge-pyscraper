@@ -1,6 +1,6 @@
 from pprint import pprint
+
 from fbref.FBRef_Table import FBRef_Table
-from utils.set_data_type import set_data_type
 
 pprint(
     FBRef_Table(
