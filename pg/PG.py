@@ -35,3 +35,18 @@ class PG:
 
             self.conn.commit()
             print(f"Created table: {table_name}")
+
+    def insert_rows(self, schema: str, table_name: str, rows: list[Any]):
+        with self.conn.cursor() as cur:
+            cur.execute(
+                sql.SQL(
+                    "INSERT INTO {schema}.{table_name}({column_names}) VALUES ({row_values})"
+                ).format(
+                    schema=sql.Identifier(schema),
+                    table_name=sql.Identifier(table_name),
+                    columns=sql.SQL(",".join(rows)),
+                ),
+            )
+
+            self.conn.commit()
+            print(f"Finished inserting rows into: {table_name}")
