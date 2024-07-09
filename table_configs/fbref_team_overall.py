@@ -1,8 +1,8 @@
 fbref_team_overall = {
     "table_name": "fbref_team_overall",
     "table_column_sql": [
-        "team VARCHAR (255) PRIMARY KEY",
-        "team_url VARCHAR (255) NOT NULL",
+        "rank INT PRIMARY KEY",
+        "team VARCHAR (255) NOT NULL",
         "games INT NOT NULL",
         "wins INT NOT NULL",
         "ties INT NOT NULL",
@@ -18,9 +18,7 @@ fbref_team_overall = {
         "xg_diff_per90 DECIMAL NOT NULL",
         "attendance_per_g INT NOT NULL",
         "top_team_scorers VARCHAR (255) NOT NULL",
-        "top_team_scorers_url VARCHAR (255) NOT NULL",
         "top_keeper VARCHAR (255) NOT NULL",
-        "top_keeper_url VARCHAR (255) NOT NULL",
         "notes VARCHAR (255) NOT NULL",
     ],
 }
