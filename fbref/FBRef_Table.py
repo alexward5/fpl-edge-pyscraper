@@ -23,16 +23,29 @@ class FBRef_Table:
                         {
                             "data_stat": th["data-stat"],
                             "aria_label": th["aria-label"],
-                            "text": th.text.strip(),
+                            "data_value": th.text.strip(),
                         }
                     )
             # Parse table data rows into array of dicts
             elif row_num > header_row:
                 tr_list: list[dict] = []
+                # Get data from first cell, which uses <th>
+                th = tr.find("th")
+                tr_list.append(
+                    {
+                        "data_stat": th["data-stat"],
+                        "aria_label": th["data-stat"].capitalize(),
+                        "data_value": th.text.strip(),
+                    }
+                )
+
+                # Iterate over remaining columns in row
                 for td in tr.find_all("td"):
                     cell_dict = {}
                     cell_dict["data_stat"] = td["data-stat"]
-                    cell_dict["data_value"] = td.text.strip()
+                    cell_dict["data_value"] = (
+                        td.text.strip().replace(",", "").replace("'", "''")
+                    )
 
                     # Add any hyperlinks in data cells to dict
                     cell_hyperlink = td.find("a")
