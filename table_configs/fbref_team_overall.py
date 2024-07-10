@@ -1,24 +1,100 @@
 fbref_team_overall = {
     "table_name": "fbref_team_overall",
-    "table_column_sql": [
-        "rank INT PRIMARY KEY",
-        "team VARCHAR (255) NOT NULL",
-        "games INT NOT NULL",
-        "wins INT NOT NULL",
-        "ties INT NOT NULL",
-        "losses INT NOT NULL",
-        "goals_for INT NOT NULL",
-        "goals_against INT NOT NULL",
-        "goal_diff INT NOT NULL",
-        "points INT NOT NULL",
-        "points_avg DECIMAL NOT NULL",
-        "xg_for DECIMAL NOT NULL",
-        "xg_against DECIMAL NOT NULL",
-        "xg_diff DECIMAL NOT NULL",
-        "xg_diff_per90 DECIMAL NOT NULL",
-        "attendance_per_g INT NOT NULL",
-        "top_team_scorers VARCHAR (255) NOT NULL",
-        "top_keeper VARCHAR (255) NOT NULL",
-        "notes VARCHAR (255) NOT NULL",
+    "table_column_configs": [
+        {
+            "column_name": "rank",
+            "column_type": "INT",
+            "primary_key": True,
+        },
+        {
+            "column_name": "team",
+            "column_type": "VARCHAR (255)",
+            "not_null": True,
+        },
+        {
+            "column_name": "games",
+            "column_type": "INT",
+            "not_null": True,
+        },
+        {
+            "column_name": "wins",
+            "column_type": "INT",
+            "not_null": True,
+        },
+        {
+            "column_name": "ties",
+            "column_type": "INT",
+            "not_null": True,
+        },
+        {
+            "column_name": "losses",
+            "column_type": "INT",
+            "not_null": True,
+        },
+        {
+            "column_name": "goals_for",
+            "column_type": "INT",
+            "not_null": True,
+        },
+        {
+            "column_name": "goals_against",
+            "column_type": "INT",
+            "not_null": True,
+        },
+        {
+            "column_name": "goal_diff",
+            "column_type": "INT",
+            "not_null": True,
+        },
+        {
+            "column_name": "points",
+            "column_type": "INT",
+            "not_null": True,
+        },
+        {
+            "column_name": "points_avg",
+            "column_type": "DECIMAL",
+            "not_null": True,
+        },
+        {
+            "column_name": "xg_for",
+            "column_type": "DECIMAL",
+            "not_null": True,
+        },
+        {
+            "column_name": "xg_against",
+            "column_type": "DECIMAL",
+            "not_null": True,
+        },
+        {
+            "column_name": "xg_diff",
+            "column_type": "DECIMAL",
+            "not_null": True,
+        },
+        {
+            "column_name": "xg_diff_per90",
+            "column_type": "DECIMAL",
+            "not_null": True,
+        },
+        {
+            "column_name": "attendance_per_g",
+            "column_type": "INT",
+            "not_null": True,
+        },
+        {
+            "column_name": "top_team_scorers",
+            "column_type": "VARCHAR (255)",
+            "not_null": True,
+        },
+        {
+            "column_name": "top_keeper",
+            "column_type": "VARCHAR (255)",
+            "not_null": True,
+        },
+        {
+            "column_name": "notes",
+            "column_type": "VARCHAR (255)",
+            "not_null": True,
+        },
     ],
 }
