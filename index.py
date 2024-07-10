@@ -1,5 +1,3 @@
-from pprint import pprint
-
 from pg.PG import PG
 from fbref.FBRef_Table import FBRef_Table
 from table_configs_merged import merged_table_configs
@@ -13,7 +11,7 @@ pg = PG(dbname="postgres", user="postgres")
 
 table_column_config = merged_table_configs[TABLE_NAME]["table_column_configs"]
 
-pg.create_schema(SCHEMA_NAME)
+pg.create_schema(schema_name=SCHEMA_NAME)
 pg.create_table(
     schema=SCHEMA_NAME,
     table_name=TABLE_NAME,

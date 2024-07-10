@@ -29,7 +29,7 @@ class FBRef_Table:
             # Parse table data rows into array of dicts
             elif row_num > header_row:
                 tr_list: list[dict] = []
-                # Get data from first cell, which uses <th>
+                # Get data from first cell, which uses <th> element
                 th = tr.find("th")
                 tr_list.append(
                     {
@@ -39,7 +39,7 @@ class FBRef_Table:
                     }
                 )
 
-                # Iterate over remaining columns in row
+                # Iterate over remaining cells, which use <td> element
                 for td in tr.find_all("td"):
                     cell_dict = {}
                     cell_dict["data_stat"] = td["data-stat"]

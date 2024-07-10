@@ -5,7 +5,7 @@ from table_configs_merged import merged_table_configs
 
 def clean_row_data(
     row_data: list[dict[str, Any]], table_column_config: list[dict[str, Any]]
-) -> list:
+) -> list[str]:
     cleaned_column_values = []
     for column_data in row_data:
         data_stat = column_data["data_stat"]
