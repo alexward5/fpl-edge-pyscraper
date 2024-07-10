@@ -4,6 +4,7 @@ from table_configs_merged import merged_table_configs
 from utils.build_column_sql import build_column_sql
 from utils.clean_row_data import clean_row_data
 
+
 SCHEMA_NAME = "test_schema"
 TABLE_NAME = "fbref_team_overall"
 
