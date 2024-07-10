@@ -43,9 +43,7 @@ class FBRef_Table:
                 for td in tr.find_all("td"):
                     cell_dict = {}
                     cell_dict["data_stat"] = td["data-stat"]
-                    cell_dict["data_value"] = (
-                        td.text.strip().replace(",", "").replace("'", "''")
-                    )
+                    cell_dict["data_value"] = td.text.strip()
 
                     # Add any hyperlinks in data cells to dict
                     cell_hyperlink = td.find("a")
