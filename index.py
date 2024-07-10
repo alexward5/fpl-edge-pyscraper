@@ -5,32 +5,38 @@ from utils.build_column_sql import build_column_sql
 from utils.clean_row_data import clean_row_data
 
 
-SCHEMA_NAME = "test_schema"
-TABLE_NAME = "fbref_team_overall"
-
-pg = PG(dbname="postgres", user="postgres")
-
-table_column_config = merged_table_configs[TABLE_NAME]["table_column_configs"]
-
-pg.create_schema(schema_name=SCHEMA_NAME)
-pg.create_table(
-    schema=SCHEMA_NAME,
-    table_name=TABLE_NAME,
-    columns=[build_column_sql(column_config) for column_config in table_column_config],
-)
-
-fbref_table = FBRef_Table(
-    "https://fbref.com/en/comps/9/Premier-League-Stats",
-)
-
-table_headers_list = [header["data_stat"] for header in fbref_table.table_headers]
-
-for table_row in fbref_table.table_rows:
-    cleaned_row_values = clean_row_data(table_row, table_column_config)
-
-    pg.insert_row(
-        schema=SCHEMA_NAME,
-        table_name=TABLE_NAME,
-        column_names=table_headers_list,
-        row_values=cleaned_row_values,
+def seed_table(schema_name: str, table_name: str, table_url: str):
+    pg = PG(dbname="postgres", user="postgres")
+    fbref_table = FBRef_Table(
+        table_url,
     )
+
+    table_column_config = merged_table_configs[table_name]["table_column_configs"]
+
+    pg.create_schema(schema_name=schema_name)
+    pg.create_table(
+        schema=schema_name,
+        table_name=table_name,
+        columns=[
+            build_column_sql(column_config) for column_config in table_column_config
+        ],
+    )
+
+    table_headers_list = [header["data_stat"] for header in fbref_table.table_headers]
+
+    for table_row in fbref_table.table_rows:
+        cleaned_row_values = clean_row_data(table_row, table_column_config)
+
+        pg.insert_row(
+            schema=schema_name,
+            table_name=table_name,
+            column_names=table_headers_list,
+            row_values=cleaned_row_values,
+        )
+
+
+seed_table(
+    schema_name="function_test",
+    table_name="fbref_team_overall",
+    table_url="https://fbref.com/en/comps/9/Premier-League-Stats",
+)
