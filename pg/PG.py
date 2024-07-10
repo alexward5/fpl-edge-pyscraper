@@ -1,6 +1,7 @@
+from typing import Any
+
 import psycopg
 from psycopg import sql
-from typing import Any, LiteralString
 
 
 class PG:
