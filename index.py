@@ -7,9 +7,7 @@ from utils.clean_row_data import clean_row_data
 
 def seed_table(schema_name: str, table_name: str, table_url: str):
     pg = PG(dbname="postgres", user="postgres")
-    fbref_table = FBRef_Table(
-        table_url,
-    )
+    fbref_table = FBRef_Table(table_url=table_url, header_row=1)
 
     table_column_config = merged_table_configs[table_name]["table_column_configs"]
 
@@ -27,16 +25,24 @@ def seed_table(schema_name: str, table_name: str, table_url: str):
     for table_row in fbref_table.table_rows:
         cleaned_row_values = clean_row_data(table_row, table_column_config)
 
-        pg.insert_row(
-            schema=schema_name,
-            table_name=table_name,
-            column_names=table_headers_list,
-            row_values=cleaned_row_values,
-        )
+        # Filter rows at bottom of table containing sum totals
+        sum_total_row = False
+        for row_value in cleaned_row_values:
+            if "total" in row_value.lower():
+                sum_total_row = True
+                break
+
+        if not sum_total_row:
+            pg.insert_row(
+                schema=schema_name,
+                table_name=table_name,
+                column_names=table_headers_list,
+                row_values=cleaned_row_values,
+            )
 
 
 seed_table(
-    schema_name="function_test",
-    table_name="fbref_team_overall",
-    table_url="https://fbref.com/en/comps/9/Premier-League-Stats",
+    schema_name="test_schema",
+    table_name="fbref_team_standard",
+    table_url="https://fbref.com/en/squads/18bb7c10/2023-2024/Arsenal-Stats",
 )
