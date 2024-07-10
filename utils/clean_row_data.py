@@ -4,16 +4,21 @@ from typing import Any
 def clean_row_data(
     row_data: list[dict[str, Any]], table_column_config: list[dict[str, Any]]
 ) -> list[str]:
-    cleaned_column_values = []
-    for column_data in row_data:
-        data_stat = column_data["data_stat"]
-        data_stat_config = next(
+    cleaned_cell_values = []
+    for cell_data in row_data:
+        data_stat = cell_data["data_stat"]
+        data_value = cell_data["data_value"]
+
+        column_config = next(
             item for item in table_column_config if item["column_name"] == data_stat
         )
 
-        if data_stat_config["column_type"] in ("INT", "FLOAT"):
-            cleaned_column_values.append(column_data["data_value"].replace(",", ""))
+        if column_config["column_type"] in ("INT", "DECIMAL"):
+            if data_value:
+                cleaned_cell_values.append(data_value.replace(",", ""))
+            else:
+                cleaned_cell_values.append("0")
         else:
-            cleaned_column_values.append(column_data["data_value"].replace("'", "''"))
+            cleaned_cell_values.append(data_value.replace("'", "''"))
 
-    return cleaned_column_values
+    return cleaned_cell_values
