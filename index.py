@@ -22,14 +22,14 @@ fbref_table = FBRef_Table(
     "https://fbref.com/en/comps/9/Premier-League-Stats",
 )
 
-table_headers_str = [header["data_stat"] for header in fbref_table.table_headers]
+table_headers_list = [header["data_stat"] for header in fbref_table.table_headers]
 
 for table_row in fbref_table.table_rows:
-    cleaned_row_data = clean_row_data(table_row, table_column_config)
+    cleaned_row_values = clean_row_data(table_row, table_column_config)
 
     pg.insert_row(
         schema=SCHEMA_NAME,
         table_name=TABLE_NAME,
-        column_names=table_headers_str,
-        row_values=cleaned_row_data,
+        column_names=table_headers_list,
+        row_values=cleaned_row_values,
     )
