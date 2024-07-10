@@ -1,5 +1,6 @@
 fbref_team_overall = {
     "table_name": "fbref_team_overall",
+    "header_row_index": 0,
     "table_column_configs": [
         {
             "column_name": "rank",

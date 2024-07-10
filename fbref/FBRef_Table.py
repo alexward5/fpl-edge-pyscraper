@@ -3,13 +3,13 @@ from bs4 import BeautifulSoup
 
 
 class FBRef_Table:
-    def __init__(self, table_url: str, table_index: int = 0, header_row: int = 0):
+    def __init__(self, table_url: str, table_index: int = 0, header_row_index: int = 0):
         self.table_headers: list[dict] = []
         self.table_rows: list[list[dict]] = []
 
-        self._parse_table(table_url, table_index, header_row)
+        self._parse_table(table_url, table_index, header_row_index)
 
-    def _parse_table(self, table_url: str, table_index: int, header_row: int):
+    def _parse_table(self, table_url: str, table_index: int, header_row_index: int):
         table_html: str = requests.get(table_url).text
         soup = BeautifulSoup(table_html, "html.parser")
 
@@ -17,7 +17,7 @@ class FBRef_Table:
             soup.find_all("table")[table_index].find_all("tr")
         ):
             # Parse table header row into array of dicts
-            if row_num == header_row:
+            if row_num == header_row_index:
                 for th in tr.find_all("th"):
                     self.table_headers.append(
                         {
@@ -27,7 +27,7 @@ class FBRef_Table:
                         }
                     )
             # Parse table data rows into array of dicts
-            elif row_num > header_row:
+            elif row_num > header_row_index:
                 tr_list: list[dict] = []
                 # Get data from first cell, which uses <th> element
                 th = tr.find("th")

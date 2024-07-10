@@ -6,10 +6,13 @@ from utils.clean_row_data import clean_row_data
 
 
 def seed_table(schema_name: str, table_name: str, table_url: str):
-    pg = PG(dbname="postgres", user="postgres")
-    fbref_table = FBRef_Table(table_url=table_url, header_row=1)
+    table_config = merged_table_configs[table_name]
+    table_column_config = table_config["table_column_configs"]
 
-    table_column_config = merged_table_configs[table_name]["table_column_configs"]
+    fbref_table = FBRef_Table(
+        table_url=table_url, header_row_index=table_config["header_row_index"]
+    )
+    pg = PG(dbname="postgres", user="postgres")
 
     pg.create_schema(schema_name=schema_name)
     pg.create_table(

@@ -1,5 +1,6 @@
 fbref_team_standard = {
     "table_name": "fbref_team_standard",
+    "header_row_index": 1,
     "table_column_configs": [
         {
             "column_name": "player",
