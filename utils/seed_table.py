@@ -6,7 +6,7 @@ from utils.clean_row_data import clean_row_data
 def seed_table(
     schema_name: str,
     table_name: str,
-    table_column_config: list,
+    table_column_configs: list,
     table_headers: list,
     table_rows: list,
 ):
@@ -18,14 +18,14 @@ def seed_table(
         schema=schema_name,
         table_name=table_name,
         columns=[
-            build_column_sql(column_config) for column_config in table_column_config
+            build_column_sql(column_config) for column_config in table_column_configs
         ],
     )
 
     table_headers_list = [header["data_stat"] for header in table_headers]
 
     for table_row in table_rows:
-        cleaned_row_values = clean_row_data(table_row, table_column_config)
+        cleaned_row_values = clean_row_data(table_row, table_column_configs)
 
         # Filter rows at bottom of table containing sum totals
         sum_total_row = False
