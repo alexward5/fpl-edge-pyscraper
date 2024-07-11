@@ -1,3 +1,4 @@
+from time import sleep
 from fbref.FBRef_Table import FBRef_Table
 from configs.table_configs_merged import merged_table_configs
 from configs.run_config import run_configs
@@ -24,3 +25,6 @@ for run_config in run_configs:
             table_headers=fbref_table.table_headers,
             table_rows=fbref_table.table_rows,
         )
+
+        # Sleep for 10s after each table run to avoid hitting fbref request limit
+        sleep(10)
