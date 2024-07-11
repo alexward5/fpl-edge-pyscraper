@@ -41,3 +41,5 @@ def seed_table(
                 column_names=table_headers_list,
                 row_values=cleaned_row_values,
             )
+
+    print(f"Finished inserting rows into: {table_name}")

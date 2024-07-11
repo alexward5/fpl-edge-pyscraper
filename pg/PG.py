@@ -60,4 +60,3 @@ class PG:
             )
 
             self.conn.commit()
-            print(f"Finished inserting row into: {table_name}")
