@@ -19,6 +19,9 @@ def recursive_run(table_run_config: dict, table_url: str = ""):
         header_row_index=table_config["header_row_index"],
     )
 
+    # Sleep for 10s between runs to avoid reaching rate limit
+    sleep(10)
+
     seed_table(
         schema_name=schema_name,
         table_name=table_name,
@@ -42,9 +45,6 @@ def recursive_run(table_run_config: dict, table_url: str = ""):
     if sub_table_urls:
         for sub_table_url in sub_table_urls:
             recursive_run(table_run_config["sub_table_config"], table_url=sub_table_url)
-
-    # Sleep for 10s between runs to avoid reaching rate limit
-    sleep(10)
 
 
 recursive_run(table_run_config=run_config)
