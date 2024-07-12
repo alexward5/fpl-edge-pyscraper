@@ -1,6 +1,5 @@
 from typing import Any
 
-
 run_config: dict[str, Any] = {
     "table_name": "fbref_team_overall",
     "table_url": "https://fbref.com/en/comps/9/Premier-League-Stats",

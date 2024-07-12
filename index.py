@@ -1,8 +1,8 @@
 from time import sleep
-from fbref.FBRef_Table import FBRef_Table
-from configs.table_configs_merged import merged_table_configs
-from configs.run_config import run_config
 
+from configs.run_config import run_config
+from configs.table_configs_merged import merged_table_configs
+from fbref.FBRef_Table import FBRef_Table
 from utils.seed_table import seed_table
 
 schema_name = "test_schema"
