@@ -13,24 +13,26 @@ class FBRef_Table:
         table_html: str = requests.get(table_url).text
         soup = BeautifulSoup(table_html, "html.parser")
 
-        for row_num, tr in enumerate(
-            soup.find_all("table")[table_index].find_all("tr")
-        ):
-            # Parse table header row into array of dicts
-            if row_num == header_row_index:
-                for th in tr.find_all("th"):
-                    self.table_headers.append(
-                        {
-                            "data_stat": th["data-stat"],
-                            "aria_label": th["aria-label"],
-                            "data_value": th.text.strip(),
-                        }
-                    )
-            # Parse table data rows into array of dicts
-            elif row_num > header_row_index:
-                tr_list: list[dict] = []
-                # Get data from first cell, which uses <th> element
-                th = tr.find("th")
+        table_rows = soup.find_all("table")[table_index].find_all("tr")
+
+        # Get get table headers / column names from header row
+        for th in table_rows[header_row_index].find_all("th"):
+            self.table_headers.append(
+                {
+                    "data_stat": th["data-stat"],
+                    "aria_label": th["aria-label"],
+                    "data_value": th.text.strip(),
+                }
+            )
+
+        # Process all rows below header row, which contain the table data
+        for tr in table_rows[header_row_index + 1 :]:
+            tr_list: list[dict] = []
+            # Get data from first cell, which uses <th> element
+            th = tr.find("th")
+
+            # Only process rows that have data in the first cell (some rows are empty and used for spacing)
+            if th.text.strip():
                 tr_list.append(
                     {
                         "data_stat": th["data-stat"],
