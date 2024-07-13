@@ -1,10 +1,13 @@
 from typing import Any
 
+from configs.table_configs.fbref_player_matchlog import fbref_player_matchlog
 from configs.table_configs.fbref_team_overall import fbref_team_overall
-from configs.table_configs.fbref_team_players_standard import \
-    fbref_team_players_standard
+from configs.table_configs.fbref_team_players_standard import (
+    fbref_team_players_standard,
+)
 
 merged_table_configs: dict[str, Any] = {
+    "fbref_player_matchlog": fbref_player_matchlog,
     "fbref_team_overall": fbref_team_overall,
     "fbref_team_players_standard": fbref_team_players_standard,
 }
