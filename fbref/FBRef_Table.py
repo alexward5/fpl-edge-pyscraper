@@ -55,12 +55,21 @@ class FBRef_Table:
                     cell_dict["data_stat"] = td["data-stat"]
                     cell_dict["data_value"] = td.text.strip()
 
-                    # Compare column names and values to determine if row should be filtered
+                    # Compare column name and value to determine if row should be filtered
                     for filter_rule in filter_rules:
+                        filter_column_name = filter_rule["column_name"]
+                        filter_comparision = filter_rule["comparison"]
+                        filter_value = filter_rule["value"]
+
+                        cell_data_stat = cell_dict["data_stat"]
+                        cell_data_value = cell_dict["data_value"]
+
                         column_match = eval(
-                            f"'{filter_rule["column_name"]}' {filter_rule['comparison']} '{cell_dict["data_stat"]}'"
+                            f"'{filter_column_name}' == '{cell_data_stat}'"
                         )
-                        value_match = filter_rule["value"] == cell_dict["data_value"]
+                        value_match = eval(
+                            f"{filter_value} {filter_comparision} {cell_data_value}"
+                        )
 
                         if column_match and value_match:
                             filter_row = True
