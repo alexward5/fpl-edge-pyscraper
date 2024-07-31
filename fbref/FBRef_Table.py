@@ -8,12 +8,13 @@ class FBRef_Table:
         self.table_headers: list[dict] = []
         self.table_rows: list[list[dict]] = []
 
+        self._parse_table(table_url, table_config)
+
+    def _parse_table(self, table_url: str, table_config: dict[str, Any]):
         table_index = table_config["table_index"]
         header_row_index = table_config["header_row_index"]
+        filter_rules = table_config.get("filter_rules", [])
 
-        self._parse_table(table_url, table_index, header_row_index)
-
-    def _parse_table(self, table_url: str, table_index: int, header_row_index: int):
         table_html: str = requests.get(table_url).text
         soup = BeautifulSoup(table_html, "html.parser")
 
@@ -45,11 +46,25 @@ class FBRef_Table:
                     }
                 )
 
+                # Rows will be filtered using rules defined in fbref table config
+                filter_row = False
+
                 # Iterate over remaining cells, which use <td> element
                 for td in tr.find_all("td"):
                     cell_dict = {}
                     cell_dict["data_stat"] = td["data-stat"]
                     cell_dict["data_value"] = td.text.strip()
+
+                    # Compare column names and values to determine if row should be filtered
+                    for filter_rule in filter_rules:
+                        column_match = eval(
+                            f"'{filter_rule["column_name"]}' {filter_rule['comparison']} '{cell_dict["data_stat"]}'"
+                        )
+                        value_match = filter_rule["value"] == cell_dict["data_value"]
+
+                        if column_match and value_match:
+                            filter_row = True
+                            break
 
                     # Add any hyperlinks in data cells to dict
                     cell_hyperlink = td.find("a")
@@ -60,5 +75,5 @@ class FBRef_Table:
 
                     tr_list.append(cell_dict)
 
-                if tr_list:
+                if tr_list and not filter_row:
                     self.table_rows.append(tr_list)
