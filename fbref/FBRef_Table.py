@@ -1,11 +1,15 @@
+from typing import Any
 import requests
 from bs4 import BeautifulSoup
 
 
 class FBRef_Table:
-    def __init__(self, table_url: str, table_index: int = 0, header_row_index: int = 0):
+    def __init__(self, table_url: str, table_config: dict[str, Any]):
         self.table_headers: list[dict] = []
         self.table_rows: list[list[dict]] = []
+
+        table_index = table_config["table_index"]
+        header_row_index = table_config["header_row_index"]
 
         self._parse_table(table_url, table_index, header_row_index)
 

@@ -1,6 +1,6 @@
 from time import sleep
 
-from configs.run_config import run_config
+from configs.run_config import fbref_table_config
 from configs.table_configs_merged import merged_table_configs
 from fbref.FBRef_Table import FBRef_Table
 from utils.seed_table import seed_table
@@ -8,15 +8,15 @@ from utils.seed_table import seed_table
 schema_name = "test_schema"
 
 
-def recursive_run(table_run_config: dict, table_url: str = ""):
-    table_name = table_run_config["table_name"]
+def recursive_run(fbref_table_config: dict, table_url: str = ""):
+    table_name = fbref_table_config["table_name"]
     table_config = merged_table_configs[table_name]
 
-    table_url = table_run_config.get("table_url") or table_url
+    table_url = fbref_table_config.get("table_url") or table_url
 
     fbref_table = FBRef_Table(
         table_url=table_url,
-        header_row_index=table_config["header_row_index"],
+        table_config=fbref_table_config,
     )
 
     # Sleep for 10s between runs to avoid reaching rate limit
@@ -31,8 +31,8 @@ def recursive_run(table_run_config: dict, table_url: str = ""):
     )
 
     sub_table_urls = []
-    if table_run_config.get("sub_table_config"):
-        sub_table_config = table_run_config["sub_table_config"]
+    if fbref_table_config.get("sub_table_config"):
+        sub_table_config = fbref_table_config["sub_table_config"]
         hyperlink_data_stat = sub_table_config["hyperlink_data_stat"]
 
         for row_data in fbref_table.table_rows:
@@ -44,7 +44,9 @@ def recursive_run(table_run_config: dict, table_url: str = ""):
 
     if sub_table_urls:
         for sub_table_url in sub_table_urls:
-            recursive_run(table_run_config["sub_table_config"], table_url=sub_table_url)
+            recursive_run(
+                fbref_table_config["sub_table_config"], table_url=sub_table_url
+            )
 
 
-recursive_run(table_run_config=run_config)
+recursive_run(fbref_table_config=fbref_table_config)
