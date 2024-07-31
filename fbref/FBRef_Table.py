@@ -65,10 +65,10 @@ class FBRef_Table:
                         cell_data_value = cell_dict["data_value"]
 
                         column_match = eval(
-                            f"'{filter_column_name}' == '{cell_data_stat}'"
+                            f'"{filter_column_name}" == "{cell_data_stat}"'
                         )
                         value_match = eval(
-                            f"{filter_value} {filter_comparision} {cell_data_value}"
+                            f'"{filter_value}" {filter_comparision} "{cell_data_value}"'
                         )
 
                         if column_match and value_match:
