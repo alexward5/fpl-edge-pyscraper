@@ -3,6 +3,11 @@ fbref_player_matchlog = {
     "header_row_index": 1,
     "table_column_configs": [
         {
+            "column_name": "player",
+            "column_type": "VARCHAR (255)",
+            "not_null": True,
+        },
+        {
             "column_name": "date",
             "column_type": "VARCHAR (255)",
             "not_null": True,
