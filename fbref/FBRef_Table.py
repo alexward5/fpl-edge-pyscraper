@@ -1,12 +1,21 @@
-from typing import Any
+from typing import Any, Optional
 import requests
 from bs4 import BeautifulSoup
 
 
 class FBRef_Table:
-    def __init__(self, table_url: str, table_config: dict[str, Any]):
+    def __init__(
+        self,
+        table_url: str,
+        table_config: dict[str, Any],
+        custom_column: Optional[dict] = None,
+    ):
         self.table_headers: list[dict] = []
         self.table_rows: list[list[dict]] = []
+        self.custom_column = custom_column
+
+        if self.custom_column:
+            self.table_headers.append({"data_stat": self.custom_column["data_stat"]})
 
         self._parse_table(table_url, table_config)
 
@@ -18,7 +27,12 @@ class FBRef_Table:
         table_html: str = requests.get(table_url).text
         soup = BeautifulSoup(table_html, "html.parser")
 
-        table_rows = soup.find_all("table")[table_index].find_all("tr")
+        table_rows = soup.find_all("table")
+        if table_rows:
+            table_rows = table_rows[table_index].find_all("tr")
+        else:
+            self.table_rows = []
+            return
 
         # Get get table headers / column names from header row
         for th in table_rows[header_row_index].find_all("th"):
@@ -35,6 +49,15 @@ class FBRef_Table:
             tr_list: list[dict] = []
             # Get data from first cell, which uses <th> element
             th = tr.find("th")
+
+            if self.custom_column:
+                tr_list.append(
+                    {
+                        "data_stat": self.custom_column["data_stat"],
+                        "aria_label": self.custom_column["data_stat"].capitalize(),
+                        "data_value": self.custom_column["data_value"],
+                    }
+                )
 
             # Only process rows that have data in the first cell (some rows are empty and used for spacing)
             if th.text.strip():
@@ -84,5 +107,10 @@ class FBRef_Table:
 
                     tr_list.append(cell_dict)
 
-                if tr_list and not filter_row:
+                # Filter hidden & rows that do not contain data
+                if (
+                    tr_list
+                    and len(tr_list) == len(self.table_headers)
+                    and not filter_row
+                ):
                     self.table_rows.append(tr_list)
