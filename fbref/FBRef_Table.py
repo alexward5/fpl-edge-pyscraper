@@ -15,20 +15,22 @@ class FBRef_Table:
         self.table_config = table_config
         self.custom_column = custom_column
 
+        self._table_rows_raw: list = []
+
         table_html: str = requests.get(table_url).text
         self.soup = BeautifulSoup(table_html, "html.parser")
 
         # Check that table exists in html before proceeding
         if self.soup.find_all("table"):
-            self._parse_headers()
-            self._parse_table()
+            table_index = self.table_config["table_index"]
+            self._table_rows_raw = self.soup.find_all("table")[table_index].find_all(
+                "tr"
+            )
 
-    def _parse_headers(self) -> None:
-        table_index = self.table_config["table_index"]
-        header_row_index = self.table_config["header_row_index"]
+            self._parse_headers(header_row_index=self.table_config["header_row_index"])
+            self._parse_table(header_row_index=self.table_config["header_row_index"])
 
-        table_rows = self.soup.find_all("table")[table_index].find_all("tr")
-
+    def _parse_headers(self, header_row_index: int) -> None:
         # Add custom column to first column in list of headers
         if self.custom_column:
             self.table_headers.append(
@@ -40,7 +42,7 @@ class FBRef_Table:
             )
 
         # Get get table headers / column names from header row
-        for th in table_rows[header_row_index].find_all("th"):
+        for th in self._table_rows_raw[header_row_index].find_all("th"):
             self.table_headers.append(
                 {
                     "data_stat": th["data-stat"],
@@ -49,15 +51,11 @@ class FBRef_Table:
                 }
             )
 
-    def _parse_table(self) -> None:
-        table_index = self.table_config["table_index"]
-        header_row_index = self.table_config["header_row_index"]
+    def _parse_table(self, header_row_index: int) -> None:
         filter_rules = self.table_config.get("filter_rules", [])
 
-        table_rows = self.soup.find_all("table")[table_index].find_all("tr")
-
         # Process all rows below header row, which contain the table data
-        for table_row in table_rows[header_row_index + 1 :]:
+        for table_row in self._table_rows_raw[header_row_index + 1 :]:
             row_data = []
             filter_row = False
 
@@ -80,7 +78,7 @@ class FBRef_Table:
                 else len(remaining_cells) + 1
             )
 
-            # Check that the row has the same number of columns as the table has headers
+            # Check that the row has the same number of columns as the table has headers, otherwise skip row
             if column_count != len(self.table_headers):
                 continue
 
