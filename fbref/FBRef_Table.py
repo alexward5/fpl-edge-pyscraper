@@ -12,27 +12,26 @@ class FBRef_Table:
     ):
         self.table_headers: list[dict] = []
         self.table_rows: list[list[dict]] = []
+        self.table_config = table_config
         self.custom_column = custom_column
 
+        table_html: str = requests.get(table_url).text
+        self.soup = BeautifulSoup(table_html, "html.parser")
+
+        # Check that table exists in html before proceeding
+        if self.soup.find_all("table"):
+            self._parse_headers()
+            self._parse_table()
+
+    def _parse_headers(self):
+        table_index = self.table_config["table_index"]
+        header_row_index = self.table_config["header_row_index"]
+
+        table_rows = self.soup.find_all("table")[table_index].find_all("tr")
+
+        # Add custom column to first column in list of headers
         if self.custom_column:
             self.table_headers.append({"data_stat": self.custom_column["data_stat"]})
-
-        self._parse_table(table_url, table_config)
-
-    def _parse_table(self, table_url: str, table_config: dict[str, Any]):
-        table_index = table_config["table_index"]
-        header_row_index = table_config["header_row_index"]
-        filter_rules = table_config.get("filter_rules", [])
-
-        table_html: str = requests.get(table_url).text
-        soup = BeautifulSoup(table_html, "html.parser")
-
-        table_rows = soup.find_all("table")
-        if table_rows:
-            table_rows = table_rows[table_index].find_all("tr")
-        else:
-            self.table_rows = []
-            return
 
         # Get get table headers / column names from header row
         for th in table_rows[header_row_index].find_all("th"):
@@ -44,9 +43,16 @@ class FBRef_Table:
                 }
             )
 
+    def _parse_table(self):
+        table_index = self.table_config["table_index"]
+        header_row_index = self.table_config["header_row_index"]
+        filter_rules = self.table_config.get("filter_rules", [])
+
+        table_rows = self.soup.find_all("table")[table_index].find_all("tr")
+
         # Process all rows below header row, which contain the table data
         for tr in table_rows[header_row_index + 1 :]:
-            tr_list: list[dict] = []
+            tr_list = []
             # Get data from first cell, which uses <th> element
             th = tr.find("th")
 
