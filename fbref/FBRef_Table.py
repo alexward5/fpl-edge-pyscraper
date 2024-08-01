@@ -23,7 +23,7 @@ class FBRef_Table:
             self._parse_headers()
             self._parse_table()
 
-    def _parse_headers(self):
+    def _parse_headers(self) -> None:
         table_index = self.table_config["table_index"]
         header_row_index = self.table_config["header_row_index"]
 
@@ -31,19 +31,25 @@ class FBRef_Table:
 
         # Add custom column to first column in list of headers
         if self.custom_column:
-            self.table_headers.append({"data_stat": self.custom_column["data_stat"]})
+            self.table_headers.append(
+                {
+                    "data_stat": self.custom_column["data_stat"],
+                    "aria_label": self.custom_column["data_stat"].capitalize(),
+                    "data_value": self.custom_column["data_stat"],
+                }
+            )
 
         # Get get table headers / column names from header row
         for th in table_rows[header_row_index].find_all("th"):
             self.table_headers.append(
                 {
                     "data_stat": th["data-stat"],
-                    "aria_label": th["aria-label"],
+                    "aria_label": th["aria-label"].capitalize(),
                     "data_value": th.text.strip(),
                 }
             )
 
-    def _parse_table(self):
+    def _parse_table(self) -> None:
         table_index = self.table_config["table_index"]
         header_row_index = self.table_config["header_row_index"]
         filter_rules = self.table_config.get("filter_rules", [])
@@ -51,13 +57,12 @@ class FBRef_Table:
         table_rows = self.soup.find_all("table")[table_index].find_all("tr")
 
         # Process all rows below header row, which contain the table data
-        for tr in table_rows[header_row_index + 1 :]:
-            tr_list = []
-            # Get data from first cell, which uses <th> element
-            th = tr.find("th")
+        for table_row in table_rows[header_row_index + 1 :]:
+            row_data = []
+            filter_row = False
 
             if self.custom_column:
-                tr_list.append(
+                row_data.append(
                     {
                         "data_stat": self.custom_column["data_stat"],
                         "aria_label": self.custom_column["data_stat"].capitalize(),
@@ -65,58 +70,58 @@ class FBRef_Table:
                     }
                 )
 
-            # Only process rows that have data in the first cell (some rows are empty and used for spacing)
-            if th.text.strip():
-                tr_list.append(
-                    {
-                        "data_stat": th["data-stat"],
-                        "aria_label": th["data-stat"].capitalize(),
-                        "data_value": th.text.strip(),
-                    }
-                )
+            # Get data from first cell, which uses <th> element
+            first_cell = table_row.find("th")
+            remaining_cells = table_row.find_all("td")
 
-                # Rows will be filtered using rules defined in fbref table config
-                filter_row = False
+            column_count = len(remaining_cells) + 1
 
-                # Iterate over remaining cells, which use <td> element
-                for td in tr.find_all("td"):
-                    cell_dict = {}
-                    cell_dict["data_stat"] = td["data-stat"]
-                    cell_dict["data_value"] = td.text.strip()
+            # Check that the row has the same number of columns as the table has headers
+            if column_count != len(self.table_headers):
+                continue
 
-                    # Compare column name and value to determine if row should be filtered
-                    for filter_rule in filter_rules:
-                        filter_column_name = filter_rule["column_name"]
-                        filter_comparision = filter_rule["comparison"]
-                        filter_value = filter_rule["value"]
+            # Get data from first cell, which uses <th> element
+            row_data.append(
+                {
+                    "data_stat": first_cell["data-stat"],
+                    "aria_label": first_cell["data-stat"].capitalize(),
+                    "data_value": first_cell.text.strip(),
+                }
+            )
 
-                        cell_data_stat = cell_dict["data_stat"]
-                        cell_data_value = cell_dict["data_value"]
+            # Iterate over remaining cells, which use <td> element
+            for data_cell in table_row.find_all("td"):
+                cell_dict = {}
+                cell_dict["data_stat"] = data_cell["data-stat"]
+                cell_dict["data_value"] = data_cell.text.strip()
 
-                        column_match = eval(
-                            f'"{filter_column_name}" == "{cell_data_stat}"'
-                        )
-                        value_match = eval(
-                            f'"{filter_value}" {filter_comparision} "{cell_data_value}"'
-                        )
+                # Compare column name and value to determine if row should be filtered
+                for filter_rule in filter_rules:
+                    filter_column_name = filter_rule["column_name"]
+                    filter_comparision = filter_rule["comparison"]
+                    filter_value = filter_rule["value"]
 
-                        if column_match and value_match:
-                            filter_row = True
-                            break
+                    cell_data_stat = cell_dict["data_stat"]
+                    cell_data_value = cell_dict["data_value"]
 
-                    # Add any hyperlinks in data cells to dict
-                    cell_hyperlink = td.find("a")
-                    if cell_hyperlink:
-                        cell_dict["data_hyperlink"] = (
-                            f'https://fbref.com{cell_hyperlink["href"]}'
-                        )
+                    column_match = eval(f'"{filter_column_name}" == "{cell_data_stat}"')
+                    value_match = eval(
+                        f'"{filter_value}" {filter_comparision} "{cell_data_value}"'
+                    )
 
-                    tr_list.append(cell_dict)
+                    if column_match and value_match:
+                        filter_row = True
+                        break
 
-                # Filter hidden & rows that do not contain data
-                if (
-                    tr_list
-                    and len(tr_list) == len(self.table_headers)
-                    and not filter_row
-                ):
-                    self.table_rows.append(tr_list)
+                # Add any hyperlinks in data cells to dict
+                cell_hyperlink = data_cell.find("a")
+                if cell_hyperlink:
+                    cell_dict["data_hyperlink"] = (
+                        f'https://fbref.com{cell_hyperlink["href"]}'
+                    )
+
+                row_data.append(cell_dict)
+
+            # Filter hidden & rows that do not contain data
+            if row_data and len(row_data) == len(self.table_headers) and not filter_row:
+                self.table_rows.append(row_data)
