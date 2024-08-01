@@ -74,7 +74,11 @@ class FBRef_Table:
             first_cell = table_row.find("th")
             remaining_cells = table_row.find_all("td")
 
-            column_count = len(remaining_cells) + 1
+            column_count = (
+                len(remaining_cells) + 2
+                if self.custom_column
+                else len(remaining_cells) + 1
+            )
 
             # Check that the row has the same number of columns as the table has headers
             if column_count != len(self.table_headers):
@@ -122,6 +126,5 @@ class FBRef_Table:
 
                 row_data.append(cell_dict)
 
-            # Filter hidden & rows that do not contain data
-            if row_data and len(row_data) == len(self.table_headers) and not filter_row:
+            if not filter_row:
                 self.table_rows.append(row_data)
