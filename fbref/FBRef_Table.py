@@ -1,3 +1,4 @@
+from time import sleep
 from typing import Any, Optional
 import requests
 from bs4 import BeautifulSoup
@@ -18,6 +19,10 @@ class FBRef_Table:
         self._custom_column = custom_column
 
         table_html: str = requests.get(table_url).text
+
+        # Sleep for 10s to avoid reaching rate limit
+        sleep(10)
+
         self.soup = BeautifulSoup(table_html, "html.parser")
 
         # Check that table exists in html before proceeding
