@@ -13,9 +13,9 @@ class FBRef_Table:
         self.table_headers: list[dict] = []
         self.table_rows: list[list[dict]] = []
         self.table_config = table_config
-        self.custom_column = custom_column
 
         self._table_rows_raw: list = []
+        self._custom_column = custom_column
 
         table_html: str = requests.get(table_url).text
         self.soup = BeautifulSoup(table_html, "html.parser")
@@ -32,12 +32,12 @@ class FBRef_Table:
 
     def _parse_headers(self, header_row_index: int) -> None:
         # Add custom column to first column in list of headers
-        if self.custom_column:
+        if self._custom_column:
             self.table_headers.append(
                 {
-                    "data_stat": self.custom_column["data_stat"],
-                    "aria_label": self.custom_column["data_stat"].capitalize(),
-                    "data_value": self.custom_column["data_stat"],
+                    "data_stat": self._custom_column["data_stat"],
+                    "aria_label": self._custom_column["data_stat"].capitalize(),
+                    "data_value": self._custom_column["data_stat"],
                 }
             )
 
@@ -59,12 +59,12 @@ class FBRef_Table:
             row_data = []
             filter_row = False
 
-            if self.custom_column:
+            if self._custom_column:
                 row_data.append(
                     {
-                        "data_stat": self.custom_column["data_stat"],
-                        "aria_label": self.custom_column["data_stat"].capitalize(),
-                        "data_value": self.custom_column["data_value"],
+                        "data_stat": self._custom_column["data_stat"],
+                        "aria_label": self._custom_column["data_stat"].capitalize(),
+                        "data_value": self._custom_column["data_value"],
                     }
                 )
 
@@ -74,7 +74,7 @@ class FBRef_Table:
 
             column_count = (
                 len(remaining_cells) + 2
-                if self.custom_column
+                if self._custom_column
                 else len(remaining_cells) + 1
             )
 
