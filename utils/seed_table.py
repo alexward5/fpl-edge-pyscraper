@@ -27,19 +27,11 @@ def seed_table(
     for table_row in table_rows:
         cleaned_row_values = clean_row_data(table_row, table_column_configs)
 
-        # Filter rows at bottom of table containing sum totals
-        sum_total_row = False
-        for row_value in cleaned_row_values:
-            if "total" in row_value.lower():
-                sum_total_row = True
-                break
-
-        if not sum_total_row:
-            pg.insert_row(
-                schema=schema_name,
-                table_name=table_name,
-                column_names=table_headers_list,
-                row_values=cleaned_row_values,
-            )
+        pg.insert_row(
+            schema=schema_name,
+            table_name=table_name,
+            column_names=table_headers_list,
+            row_values=cleaned_row_values,
+        )
 
     print(f"Finished inserting rows into: {table_name}")

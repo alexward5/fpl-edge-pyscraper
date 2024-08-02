@@ -57,7 +57,6 @@ class FBRef_Table:
         # Process all rows below header row, which contain the table data
         for table_row in self._table_rows_raw[header_row_index + 1 :]:
             row_data = []
-            filter_row = False
 
             if self._custom_column:
                 row_data.append(
@@ -82,6 +81,10 @@ class FBRef_Table:
             if column_count != len(self.table_headers):
                 continue
 
+            # Filter rows at bottom of table containing sum totals
+            if "total" in first_cell.text.strip().lower():
+                continue
+
             # Get data from first cell, which uses <th> element
             row_data.append(
                 {
@@ -90,6 +93,8 @@ class FBRef_Table:
                     "data_value": first_cell.text.strip(),
                 }
             )
+
+            filter_row = False
 
             # Iterate over remaining cells, which use <td> element
             for data_cell in table_row.find_all("td"):
