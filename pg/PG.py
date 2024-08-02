@@ -3,6 +3,8 @@ from typing import Any
 import psycopg
 from psycopg import sql
 
+from utils.clean_row_data import clean_row_data
+
 
 class PG:
     def __init__(self, dbname: str, user: str):
@@ -60,3 +62,30 @@ class PG:
             )
 
             self.conn.commit()
+
+    def seed_table(
+        self,
+        schema_name: str,
+        table_name: str,
+        table_rows: list,
+        table_headers: list,
+        table_column_configs: list,
+    ):
+        for table_row in table_rows:
+            table_headers_list = [header["data_stat"] for header in table_headers]
+            cleaned_row_values = clean_row_data(table_row, table_column_configs)
+
+            # Filter rows at bottom of table containing sum totals
+            sum_total_row = False
+            for row_value in cleaned_row_values:
+                if "total" in row_value.lower():
+                    sum_total_row = True
+                    break
+
+            if not sum_total_row:
+                self.insert_row(
+                    schema=schema_name,
+                    table_name=table_name,
+                    column_names=table_headers_list,
+                    row_values=cleaned_row_values,
+                )
