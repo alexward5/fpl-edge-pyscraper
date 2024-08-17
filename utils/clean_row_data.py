@@ -4,6 +4,9 @@ from typing import Any
 def clean_row_data(
     row_data: list[dict[str, Any]], table_column_config: list[dict[str, Any]]
 ) -> list[str]:
+    if len(row_data) != len(table_column_config):
+        raise ValueError("Table column count does not match config column count")
+
     cleaned_cell_values = []
     for cell_data in row_data:
         data_stat = cell_data["data_stat"]
