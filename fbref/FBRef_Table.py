@@ -32,10 +32,10 @@ class FBRef_Table:
                 "tr"
             )
 
-            self._parse_headers(header_row_index=self.table_config["header_row_index"])
-            self._parse_table(header_row_index=self.table_config["header_row_index"])
+            self._parse_headers()
+            self._parse_table()
 
-    def _parse_headers(self, header_row_index: int) -> None:
+    def _parse_headers(self) -> None:
         # Add custom column to first column in list of headers
         if self._custom_column:
             self.table_headers.append(
@@ -47,7 +47,9 @@ class FBRef_Table:
             )
 
         # Get get table headers / column names from header row
-        for th in self._table_rows_raw[header_row_index].find_all("th"):
+        for th in self._table_rows_raw[self.table_config["header_row_index"]].find_all(
+            "th"
+        ):
             if th["data-stat"] in self.table_config.get("filtered_columns", []):
                 continue
 
@@ -60,11 +62,11 @@ class FBRef_Table:
                 }
             )
 
-    def _parse_table(self, header_row_index: int) -> None:
-        row_filters = self.table_config.get("row_filters", [])
-
+    def _parse_table(self) -> None:
         # Process all rows below header row, which contain the table data
-        for table_row in self._table_rows_raw[header_row_index + 1 :]:
+        for table_row in self._table_rows_raw[
+            self.table_config["header_row_index"] + 1 :
+        ]:
             row_data = []
 
             if self._custom_column:
@@ -121,7 +123,7 @@ class FBRef_Table:
                 cell_dict["data_value"] = data_cell.text.strip()
 
                 # Compare column name and value to determine if row should be filtered
-                for filter_rule in row_filters:
+                for filter_rule in self.table_config.get("row_filters", []):
                     filter_column_name = filter_rule["column_name"]
                     filter_comparision = filter_rule["comparison"]
                     filter_value = filter_rule["value"]
