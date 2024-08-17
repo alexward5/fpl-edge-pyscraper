@@ -48,10 +48,14 @@ class FBRef_Table:
 
         # Get get table headers / column names from header row
         for th in self._table_rows_raw[header_row_index].find_all("th"):
+            if th["data-stat"] in self.table_config.get("filtered_columns", []):
+                continue
+
+            aria_label = th.get("aria-label") or th["data-stat"]
             self.table_headers.append(
                 {
                     "data_stat": th["data-stat"],
-                    "aria_label": th["aria-label"].capitalize(),
+                    "aria_label": aria_label.capitalize(),
                     "data_value": th.text.strip(),
                 }
             )
@@ -82,7 +86,11 @@ class FBRef_Table:
                 else len(remaining_cells) + 1
             )
 
-            # Check that the row has the same number of columns as the table has headers, otherwise skip row
+            column_count = column_count - len(
+                self.table_config.get("filtered_columns", [])
+            )
+
+            # Check that the row has the same number of columns as the table has headers, otherwise filter row
             if column_count != len(self.table_headers):
                 continue
 
@@ -103,8 +111,13 @@ class FBRef_Table:
 
             # Iterate over remaining cells, which use <td> element
             for data_cell in table_row.find_all("td"):
+                data_stat = data_cell["data-stat"]
+
+                if data_stat in self.table_config.get("filtered_columns", []):
+                    continue
+
                 cell_dict = {}
-                cell_dict["data_stat"] = data_cell["data-stat"]
+                cell_dict["data_stat"] = data_stat
                 cell_dict["data_value"] = data_cell.text.strip()
 
                 # Compare column name and value to determine if row should be filtered

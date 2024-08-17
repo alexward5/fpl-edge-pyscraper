@@ -2,13 +2,14 @@ from typing import Any
 
 fbref_table_config: dict[str, Any] = {
     "table_name": "fbref_team_overall",
-    "table_url": "https://fbref.com/en/comps/9/2023-2024/2023-2024-Premier-League-Stats",
+    "table_url": "https://fbref.com/en/comps/9/Premier-League-Stats",
     "table_index": 0,
     "header_row_index": 0,
     "row_filters": [
         # Rows where expression is True will be filtered from table data
-        {"column_name": "team", "comparison": "!=", "value": "Arsenal"}
+        {"column_name": "team", "comparison": "!=", "value": "Manchester Utd"}
     ],
+    "filtered_columns": ["last_5"],
     "sub_table_config": {
         "table_name": "fbref_team_players_standard",
         "table_index": 0,
