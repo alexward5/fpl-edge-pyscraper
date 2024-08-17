@@ -57,7 +57,7 @@ class FBRef_Table:
             )
 
     def _parse_table(self, header_row_index: int) -> None:
-        filter_rules = self.table_config.get("filter_rules", [])
+        row_filters = self.table_config.get("row_filters", [])
 
         # Process all rows below header row, which contain the table data
         for table_row in self._table_rows_raw[header_row_index + 1 :]:
@@ -108,7 +108,7 @@ class FBRef_Table:
                 cell_dict["data_value"] = data_cell.text.strip()
 
                 # Compare column name and value to determine if row should be filtered
-                for filter_rule in filter_rules:
+                for filter_rule in row_filters:
                     filter_column_name = filter_rule["column_name"]
                     filter_comparision = filter_rule["comparison"]
                     filter_value = filter_rule["value"]
