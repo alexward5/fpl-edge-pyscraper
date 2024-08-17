@@ -24,7 +24,7 @@ fbref_team_players_standard = {
         },
         {
             "column_name": "age",
-            "column_type": "INT",
+            "column_type": "VARCHAR (255)",
             "not_null": True,
         },
         {
