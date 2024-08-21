@@ -23,14 +23,12 @@ class FBRef_Table:
         # Sleep for 10s to avoid reaching rate limit
         sleep(10)
 
-        self.soup = BeautifulSoup(table_html, "html.parser")
+        soup = BeautifulSoup(table_html, "html.parser")
 
         # Check that table exists in html before proceeding
-        if self.soup.find_all("table"):
+        if soup.find_all("table"):
             table_index = self.table_config["table_index"]
-            self._table_rows_raw = self.soup.find_all("table")[table_index].find_all(
-                "tr"
-            )
+            self._table_rows_raw = soup.find_all("table")[table_index].find_all("tr")
 
             self._parse_headers()
             self._parse_table()
