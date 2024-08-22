@@ -1,5 +1,6 @@
 from time import sleep
 from typing import Any, Optional
+
 import requests
 from bs4 import BeautifulSoup
 
