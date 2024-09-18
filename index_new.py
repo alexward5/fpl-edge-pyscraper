@@ -1,0 +1,3 @@
+from utils.create_schema_and_tables import create_schema_and_tables
+
+create_schema_and_tables()
