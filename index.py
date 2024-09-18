@@ -1,7 +1,7 @@
 from typing import Optional
 
 from configs.run_config import fbref_table_config
-from configs.table_configs_merged import merged_table_configs
+from configs.table_configs_merged import table_configs_merged
 from fbref.FBRef_Table import FBRef_Table
 from utils.seed_table import seed_table
 
@@ -12,7 +12,7 @@ def recursive_run(
     fbref_table_config: dict, table_url: str = "", parent_field: Optional[dict] = None
 ):
     table_name = fbref_table_config["table_name"]
-    table_config = merged_table_configs[table_name]
+    table_config = table_configs_merged[table_name]
 
     table_url = fbref_table_config.get("table_url") or table_url
 
