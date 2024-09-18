@@ -13,6 +13,15 @@ class PG:
     def __del__(self):
         self.conn.close()
 
+    def drop_schema(self, schema_name: str):
+        with self.conn.cursor() as cur:
+            cur.execute(
+                sql.SQL("DROP SCHEMA {} CASCADE").format(sql.Identifier(schema_name)),
+            )
+
+            self.conn.commit()
+            print(f"Dropped schema: {schema_name}")
+
     def create_schema(self, schema_name: str):
         with self.conn.cursor() as cur:
             cur.execute(
