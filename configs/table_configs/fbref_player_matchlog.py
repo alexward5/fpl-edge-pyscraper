@@ -1,5 +1,5 @@
 fbref_player_matchlog = {
-    "table_name": "fbref_team_overall",
+    "table_name": "fbref_player_matchlog",
     "header_row_index": 1,
     "table_column_configs": [
         {
