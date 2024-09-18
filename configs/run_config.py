@@ -7,7 +7,7 @@ fbref_table_config: dict[str, Any] = {
     "header_row_index": 0,
     "row_filters": [
         # Rows where expression is True will be filtered from table data
-        {"column_name": "team", "comparison": "!=", "value": "Manchester Utd"}
+        # {"column_name": "team", "comparison": "!=", "value": "Manchester Utd"}
     ],
     "filtered_columns": ["last_5"],
     "sub_table_config": {
