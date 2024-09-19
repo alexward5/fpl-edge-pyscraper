@@ -6,10 +6,9 @@ pg = PG(dbname="postgres", user="postgres")
 
 SCHEMA_NAME = "test_schema"
 
-pg.drop_schema(schema_name=SCHEMA_NAME)
-
 
 def create_schema_and_tables():
+    pg.drop_schema(schema_name=SCHEMA_NAME)
     pg.create_schema(schema_name=SCHEMA_NAME)
 
     for table_config in list(table_configs_merged.values()):
