@@ -16,7 +16,9 @@ class PG:
     def drop_schema(self, schema_name: str):
         with self.conn.cursor() as cur:
             cur.execute(
-                sql.SQL("DROP SCHEMA {} CASCADE").format(sql.Identifier(schema_name)),
+                sql.SQL("DROP SCHEMA IF EXISTS {} CASCADE").format(
+                    sql.Identifier(schema_name)
+                ),
             )
 
             self.conn.commit()
