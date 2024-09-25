@@ -16,7 +16,7 @@ def process_fbref_table(table_url: str, fbref_table_config: dict):
         for table_cell in table_row:
             data_stat = table_cell["data_stat"]
 
-            # Add hyperlink to dataframe if hyperlink_data_stat exists in config
+            # Add hyperlink to dataframe if hyperlink_data_stat is set in config
             if data_stat == fbref_table_config.get("hyperlink_data_stat"):
                 data_value = table_cell.get("data_hyperlink") or ""
             else:
