@@ -1,10 +1,9 @@
-import pandas as pd
-import numpy as np
-from fbref.FBRef_Table import FBRef_Table
-
 import warnings
 
-warnings.simplefilter("ignore", category=FutureWarning)
+import numpy as np
+import pandas as pd
+
+from fbref.FBRef_Table import FBRef_Table
 
 
 def process_fbref_table(table_url: str, fbref_table_config: dict):
