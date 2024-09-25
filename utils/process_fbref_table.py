@@ -1,5 +1,10 @@
 import pandas as pd
+import numpy as np
 from fbref.FBRef_Table import FBRef_Table
+
+import warnings
+
+warnings.simplefilter("ignore", category=FutureWarning)
 
 
 def process_fbref_table(table_url: str, fbref_table_config: dict):
@@ -21,8 +26,13 @@ def process_fbref_table(table_url: str, fbref_table_config: dict):
     df = pd.DataFrame.from_dict(df_dict)
 
     # Infer data types of each column and fill in missing values
-    df = df.apply(pd.to_numeric, errors="ignore")
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        df = df.apply(pd.to_numeric, errors="ignore")
     df = df.convert_dtypes()
-    df = df.fillna(df)
 
-    print(df.dtypes)
+    # Fill in missing values with zeros for all numeric columns
+    for numeric_column in df.select_dtypes(include=np.number).columns:
+        df[numeric_column] = df[numeric_column].fillna(0)
+
+    print(df)
