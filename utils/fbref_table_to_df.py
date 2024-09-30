@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from fbref.FBRef_Table import FBRef_Table
+from utils.remove_commas_from_numbers import remove_commas_from_numbers
 
 
 def fbref_table_to_df(table_url: str, fbref_table_config: dict):
@@ -20,7 +21,7 @@ def fbref_table_to_df(table_url: str, fbref_table_config: dict):
             if data_stat == fbref_table_config.get("hyperlink_data_stat"):
                 data_value = table_cell.get("data_hyperlink") or ""
             else:
-                data_value = table_cell["data_value"]
+                data_value = remove_commas_from_numbers(table_cell["data_value"])
 
             # Create key for data stat in df dict, unless it already exists
             if df_dict.get(data_stat):
@@ -43,5 +44,5 @@ def fbref_table_to_df(table_url: str, fbref_table_config: dict):
     # Fill in remaining missing values with empty strings
     df.fillna("", inplace=True)
 
-    print(df)
+    print(df.dtypes)
     return df
