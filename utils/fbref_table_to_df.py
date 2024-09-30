@@ -9,24 +9,18 @@ from utils.clean_cell_data import clean_cell_data
 
 
 def fbref_table_to_df(
-    table_url: str, fbref_table_config: dict, parent_field: Optional[dict] = None
+    fbref_table: FBRef_Table,
+    parent_field: Optional[dict] = None,
 ):
-    fbref_table = FBRef_Table(table_url=table_url, table_config=fbref_table_config)
-
     # Create pandas dataframe using data from fbref table
     df_dict: dict[str, list] = {}
 
     for table_row in fbref_table.table_rows:
         for table_cell in table_row:
             data_stat = table_cell["data_stat"]
+            data_value = clean_cell_data(table_cell["data_value"])
 
-            # Add hyperlink to dataframe if hyperlink_data_stat is set in config
-            if data_stat == fbref_table_config.get("hyperlink_data_stat"):
-                data_value = table_cell.get("data_hyperlink") or ""
-            else:
-                data_value = clean_cell_data(table_cell["data_value"])
-
-            # Create key for data stat in df dict, unless it already exists
+            # Create key for data stat in df dict, or if it already exists append value to list
             if df_dict.get(data_stat):
                 df_dict[data_stat].append(data_value)
             else:
