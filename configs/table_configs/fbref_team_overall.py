@@ -92,10 +92,5 @@ fbref_team_overall = {
             "column_type": "VARCHAR (255)",
             "not_null": True,
         },
-        {
-            "column_name": "notes",
-            "column_type": "VARCHAR (255)",
-            "not_null": True,
-        },
     ],
 }
