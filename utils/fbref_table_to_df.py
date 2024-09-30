@@ -6,7 +6,7 @@ import pandas as pd
 from fbref.FBRef_Table import FBRef_Table
 
 
-def process_fbref_table(table_url: str, fbref_table_config: dict):
+def fbref_table_to_df(table_url: str, fbref_table_config: dict):
     fbref_table = FBRef_Table(table_url=table_url, table_config=fbref_table_config)
 
     # Create pandas dataframe using data from fbref table
@@ -44,3 +44,4 @@ def process_fbref_table(table_url: str, fbref_table_config: dict):
     df.fillna("", inplace=True)
 
     print(df)
+    return df
