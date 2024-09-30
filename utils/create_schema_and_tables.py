@@ -4,16 +4,14 @@ from utils.build_column_sql import build_column_sql
 
 pg = PG(dbname="postgres", user="postgres")
 
-SCHEMA_NAME = "test_schema"
 
-
-def create_schema_and_tables():
-    pg.drop_schema(schema_name=SCHEMA_NAME)
-    pg.create_schema(schema_name=SCHEMA_NAME)
+def create_schema_and_tables(schema_name: str):
+    pg.drop_schema(schema_name)
+    pg.create_schema(schema_name)
 
     for table_config in list(table_configs_merged.values()):
         pg.create_table(
-            schema=SCHEMA_NAME,
+            schema=schema_name,
             table_name=table_config["table_name"],
             columns=[
                 build_column_sql(column_config)
