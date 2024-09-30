@@ -1,3 +1,4 @@
+from typing import Optional
 import warnings
 
 import numpy as np
@@ -7,7 +8,9 @@ from fbref.FBRef_Table import FBRef_Table
 from utils.clean_cell_data import clean_cell_data
 
 
-def fbref_table_to_df(table_url: str, fbref_table_config: dict):
+def fbref_table_to_df(
+    table_url: str, fbref_table_config: dict, parent_field: Optional[dict] = None
+):
     fbref_table = FBRef_Table(table_url=table_url, table_config=fbref_table_config)
 
     # Create pandas dataframe using data from fbref table
@@ -29,6 +32,10 @@ def fbref_table_to_df(table_url: str, fbref_table_config: dict):
             else:
                 df_dict[data_stat] = [data_value]
 
+    # Add parent field to dict before crearting dataframe
+    if parent_field:
+        df_dict[parent_field["data_stat"]] = [parent_field["data_value"]]
+
     df = pd.DataFrame.from_dict(df_dict)
 
     # Infer data types of each column
@@ -44,5 +51,5 @@ def fbref_table_to_df(table_url: str, fbref_table_config: dict):
     # Fill in remaining missing values with empty strings
     df.fillna("", inplace=True)
 
-    print(df.dtypes)
+    print(df)
     return df
