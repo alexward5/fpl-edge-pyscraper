@@ -1,75 +1,66 @@
 from typing import Optional
 
 from configs.run_config import fbref_table_config
-from configs.table_configs_merged import table_configs_merged
 from fbref.FBRef_Table import FBRef_Table
-from utils.seed_table import seed_table
+from pg.PG import PG
+from utils.create_schema_and_tables import create_schema_and_tables
+from utils.fbref_table_to_df import fbref_table_to_df
+from utils.get_child_table_urls import get_child_table_urls
 
-schema_name = "test_schema"
+pg = PG(dbname="postgres", user="postgres")
+
+SCHEMA_NAME = "test_schema_new"
+CREATE_SCHEMA_AND_TABLES = True
+
+if CREATE_SCHEMA_AND_TABLES:
+    create_schema_and_tables(schema_name=SCHEMA_NAME)
 
 
-def recursive_run(
-    fbref_table_config: dict, table_url: str = "", parent_field: Optional[dict] = None
+def process_fbref_table(
+    table_url: str, fbref_table_config: dict, parent_field: Optional[dict] = None
 ):
-    table_name = fbref_table_config["table_name"]
-    table_config = table_configs_merged[table_name]
+    fbref_table = FBRef_Table(table_url=table_url, table_config=fbref_table_config)
 
-    table_url = fbref_table_config.get("table_url") or table_url
-
-    fbref_table = FBRef_Table(
-        table_url=table_url, table_config=fbref_table_config, custom_column=parent_field
+    fbref_table_df = fbref_table_to_df(
+        fbref_table=fbref_table, parent_field=parent_field
     )
 
-    seed_table(
-        schema_name=schema_name,
-        table_name=table_name,
-        table_column_configs=table_config["table_column_configs"],
-        table_headers=fbref_table.table_headers,
-        table_rows=fbref_table.table_rows,
-    )
+    for _, row in fbref_table_df.iterrows():
+        pg.insert_row(
+            schema=SCHEMA_NAME,
+            table_name=fbref_table_config["table_name"],
+            column_names=fbref_table_df.columns.to_list(),
+            row_values=row.to_list(),
+        )
 
-    sub_tables_metadata: list[dict] = []
-    if fbref_table_config.get("sub_table_config"):
-        sub_table_config = fbref_table_config["sub_table_config"]
-        hyperlink_data_stat = sub_table_config["hyperlink_data_stat"]
+    # If child table config is set, recursively process child tables
+    if fbref_table_config.get("child_table_config"):
+        child_table_config = fbref_table_config["child_table_config"]
+        hyperlink_data_stat = child_table_config["hyperlink_data_stat"]
 
-        for row_data in fbref_table.table_rows:
-            sub_table_metadata = {}
+        # Get child table URLs from parent table hyperlinks
+        child_table_urls = get_child_table_urls(
+            fbref_table=fbref_table, hyperlink_data_stat=hyperlink_data_stat
+        )
 
-            hyperlink_cell = next(
-                item for item in row_data if item["data_stat"] == hyperlink_data_stat
-            )
+        for index, child_table_url in enumerate(child_table_urls):
+            run_args = {
+                "table_url": child_table_url,
+                "fbref_table_config": child_table_config,
+            }
 
-            if hyperlink_cell.get("data_hyperlink"):
-                sub_table_metadata["data_hyperlink"] = hyperlink_cell["data_hyperlink"]
-
-            if sub_table_config.get("include_parent_field"):
-                parent_field_data_stat = sub_table_config["include_parent_field"]
-                parent_field_cell = next(
-                    item
-                    for item in row_data
-                    if item["data_stat"] == parent_field_data_stat
-                )
-
-                sub_table_metadata["parent_field"] = {
-                    "data_stat": parent_field_cell["data_stat"],
-                    "data_value": parent_field_cell["data_value"],
+            # Add parent field to run args if set in config
+            if child_table_config.get("include_parent_field"):
+                run_args["parent_field"] = {
+                    "data_stat": child_table_config["include_parent_field"],
+                    "data_value": fbref_table_df.loc[
+                        index, child_table_config["include_parent_field"]
+                    ],
                 }
 
-            if sub_table_metadata.get("data_hyperlink"):
-                sub_tables_metadata.append(sub_table_metadata)
-
-        if sub_tables_metadata:
-            for sub_table_metadata in sub_tables_metadata:
-                run_args = {
-                    "fbref_table_config": fbref_table_config["sub_table_config"],
-                    "table_url": sub_table_metadata["data_hyperlink"],
-                }
-
-                if sub_table_config.get("include_parent_field"):
-                    run_args["parent_field"] = sub_table_metadata["parent_field"]
-
-                recursive_run(**run_args)
+            process_fbref_table(**run_args)
 
 
-recursive_run(fbref_table_config=fbref_table_config)
+process_fbref_table(
+    table_url=fbref_table_config["table_url"], fbref_table_config=fbref_table_config
+)
