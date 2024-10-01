@@ -49,6 +49,7 @@ def process_fbref_table(
                 "fbref_table_config": child_table_config,
             }
 
+            # Add parent field to run args if set in config
             if child_table_config.get("include_parent_field"):
                 run_args["parent_field"] = {
                     "data_stat": child_table_config["include_parent_field"],
