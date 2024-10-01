@@ -26,11 +26,12 @@ def fbref_table_to_df(
             else:
                 df_dict[data_stat] = [data_value]
 
-    # Add parent field to dict before crearting dataframe
-    if parent_field:
-        df_dict[parent_field["data_stat"]] = [parent_field["data_value"]]
-
     df = pd.DataFrame.from_dict(df_dict)
+
+    # Add parent field to new column in dataframe
+    if parent_field:
+        # df.assign(**{parent_field["data_stat"]: parent_field["data_value"]})
+        df[parent_field["data_stat"]] = parent_field["data_value"]
 
     # Infer data types of each column
     with warnings.catch_warnings():
