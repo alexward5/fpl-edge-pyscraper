@@ -41,10 +41,10 @@ def fbref_table_to_df(
 
     # Fill in missing values with zeros for all numeric columns
     for numeric_column in df.select_dtypes(include=np.number).columns:
-        df[numeric_column].fillna(0, inplace=True)
+        df[numeric_column] = df[numeric_column].fillna(0)
 
     # Fill in remaining missing values with empty strings
-    df.fillna("", inplace=True)
+    df = df.fillna("")
 
     print(df)
     return df
