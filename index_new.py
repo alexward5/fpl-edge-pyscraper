@@ -38,11 +38,26 @@ def process_fbref_table(
         child_table_config = fbref_table_config["child_table_config"]
         hyperlink_data_stat = child_table_config["hyperlink_data_stat"]
 
+        # Get child table URLs from parent table hyperlinks
         child_table_urls = get_child_table_urls(
             fbref_table=fbref_table, hyperlink_data_stat=hyperlink_data_stat
         )
 
-        print(child_table_urls)
+        for index, child_table_url in enumerate(child_table_urls):
+            run_args = {
+                "table_url": child_table_url,
+                "fbref_table_config": child_table_config,
+            }
+
+            if child_table_config.get("include_parent_field"):
+                run_args["parent_field"] = {
+                    "data_stat": child_table_config["include_parent_field"],
+                    "data_value": fbref_table_df.loc[
+                        index, child_table_config["include_parent_field"]
+                    ],
+                }
+
+            process_fbref_table(**run_args)
 
 
 process_fbref_table(
