@@ -1,5 +1,5 @@
 from time import sleep
-from typing import Any, Optional
+from typing import Any
 
 import requests
 from bs4 import BeautifulSoup
@@ -10,14 +10,12 @@ class FBRef_Table:
         self,
         table_url: str,
         table_config: dict[str, Any],
-        custom_column: Optional[dict] = None,
     ):
         self.table_headers: list[dict] = []
         self.table_rows: list[list[dict]] = []
         self.table_config = table_config
 
         self._table_rows_raw: list = []
-        self._custom_column = custom_column
 
         table_html: str = requests.get(table_url).text
 
@@ -35,16 +33,6 @@ class FBRef_Table:
             self._parse_table()
 
     def _parse_headers(self) -> None:
-        # Add custom column to first column in list of headers
-        if self._custom_column:
-            self.table_headers.append(
-                {
-                    "data_stat": self._custom_column["data_stat"],
-                    "aria_label": self._custom_column["data_stat"].capitalize(),
-                    "data_value": self._custom_column["data_stat"],
-                }
-            )
-
         # Get get table headers / column names from header row
         for th in self._table_rows_raw[self.table_config["header_row_index"]].find_all(
             "th"
@@ -68,24 +56,11 @@ class FBRef_Table:
         ]:
             row_data = []
 
-            if self._custom_column:
-                row_data.append(
-                    {
-                        "data_stat": self._custom_column["data_stat"],
-                        "aria_label": self._custom_column["data_stat"].capitalize(),
-                        "data_value": self._custom_column["data_value"],
-                    }
-                )
-
             # Get data from first cell, which uses <th> element
             first_cell = table_row.find("th")
             remaining_cells = table_row.find_all("td")
 
-            column_count = (
-                len(remaining_cells) + 2
-                if self._custom_column
-                else len(remaining_cells) + 1
-            )
+            column_count = len(remaining_cells) + 1
 
             column_count = column_count - len(
                 self.table_config.get("filtered_columns", [])
