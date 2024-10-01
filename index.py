@@ -9,7 +9,7 @@ from utils.get_child_table_urls import get_child_table_urls
 
 pg = PG(dbname="postgres", user="postgres")
 
-SCHEMA_NAME = "test_schema_new"
+SCHEMA_NAME = "test_schema"
 CREATE_SCHEMA_AND_TABLES = True
 
 if CREATE_SCHEMA_AND_TABLES:
