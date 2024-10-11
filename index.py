@@ -22,6 +22,7 @@ def process_fbref_table(
 ):
     fbref_table = FBRef_Table(table_url=table_url, table_config=fbref_table_config)
 
+    # Create pandas dataframe using data from fbref table
     fbref_table_df = fbref_table_to_df(
         fbref_table=fbref_table, parent_field=parent_field
     )
@@ -30,6 +31,7 @@ def process_fbref_table(
     if fbref_table_config.get("row_id_input_fields"):
         generate_row_ids(fbref_table_df, fbref_table_config["row_id_input_fields"])
 
+    # Insert dataframe rows into postgres table
     for _, row in fbref_table_df.iterrows():
         pg.insert_row(
             schema=SCHEMA_NAME,
@@ -48,6 +50,7 @@ def process_fbref_table(
             fbref_table=fbref_table, hyperlink_data_stat=hyperlink_data_stat
         )
 
+        # For each child table URL, recursively process child table
         for index, child_table_url in enumerate(child_table_urls):
             run_args = {
                 "table_url": child_table_url,
