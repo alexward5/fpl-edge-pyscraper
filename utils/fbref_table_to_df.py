@@ -30,7 +30,6 @@ def fbref_table_to_df(
 
     # Add parent field to new column in dataframe
     if parent_field:
-        # df.assign(**{parent_field["data_stat"]: parent_field["data_value"]})
         df[parent_field["data_stat"]] = parent_field["data_value"]
 
     # Infer data types of each column
