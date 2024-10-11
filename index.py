@@ -2,14 +2,15 @@ from typing import Optional
 
 from configs.run_config import fbref_table_config
 from fbref.FBRef_Table import FBRef_Table
-from pg.PG import PG
-from pg.helpers.create_schema_and_tables import create_schema_and_tables
 from fbref.helpers.fbref_table_to_df import fbref_table_to_df
+from fbref.helpers.generate_row_ids import generate_row_ids
 from fbref.helpers.get_child_table_urls import get_child_table_urls
+from pg.helpers.create_schema_and_tables import create_schema_and_tables
+from pg.PG import PG
 
 pg = PG(dbname="postgres", user="postgres")
 
-SCHEMA_NAME = "test_schema"
+SCHEMA_NAME = "test_schema_new"
 CREATE_SCHEMA_AND_TABLES = True
 
 if CREATE_SCHEMA_AND_TABLES:
@@ -24,6 +25,10 @@ def process_fbref_table(
     fbref_table_df = fbref_table_to_df(
         fbref_table=fbref_table, parent_field=parent_field
     )
+
+    # If configured, generate unique ids for each row in dataframe using row id input fields
+    if fbref_table_config.get("row_id_input_fields"):
+        generate_row_ids(fbref_table_df, fbref_table_config["row_id_input_fields"])
 
     for _, row in fbref_table_df.iterrows():
         pg.insert_row(
