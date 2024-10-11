@@ -3,9 +3,9 @@ from typing import Optional
 from configs.run_config import fbref_table_config
 from fbref.FBRef_Table import FBRef_Table
 from pg.PG import PG
-from utils.create_schema_and_tables import create_schema_and_tables
-from utils.fbref_table_to_df import fbref_table_to_df
-from utils.get_child_table_urls import get_child_table_urls
+from pg.helpers.create_schema_and_tables import create_schema_and_tables
+from fbref.helpers.fbref_table_to_df import fbref_table_to_df
+from fbref.helpers.get_child_table_urls import get_child_table_urls
 
 pg = PG(dbname="postgres", user="postgres")
 

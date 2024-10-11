@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from fbref.FBRef_Table import FBRef_Table
-from utils.clean_cell_data import clean_cell_data
+from fbref.helpers.clean_cell_data import clean_cell_data
 
 
 def fbref_table_to_df(

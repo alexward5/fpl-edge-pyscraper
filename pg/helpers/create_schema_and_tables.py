@@ -1,6 +1,6 @@
 from configs.table_configs_merged import table_configs_merged
 from pg.PG import PG
-from utils.build_column_sql import build_column_sql
+from pg.helpers.build_column_sql import build_column_sql
 
 pg = PG(dbname="postgres", user="postgres")
 
