@@ -1,5 +1,5 @@
 from configs.run_config import fbref_table_config
-from pg.helpers.create_schema_and_tables import create_schema_and_tables
+from run_scripts.create_schema_and_tables import create_schema_and_tables
 from run_scripts.process_fbref_table import process_fbref_table
 
 SCHEMA_NAME = "test_schema_new"
