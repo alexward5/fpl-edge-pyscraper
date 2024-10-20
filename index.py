@@ -1,4 +1,4 @@
-from configs.run_config import fbref_table_config
+from fbref.configs.run_config import fbref_table_config
 from run_scripts.create_schema_and_tables import create_schema_and_tables
 from run_scripts.process_fbref_table import process_fbref_table
 from run_scripts.process_fpl_api_data import process_fpl_api_data
