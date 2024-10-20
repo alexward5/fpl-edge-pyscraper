@@ -3,6 +3,11 @@ fbref_team_players_standard = {
     "header_row_index": 1,
     "table_column_configs": [
         {
+            "column_name": "fbref_row_id",
+            "column_type": "VARCHAR (255)",
+            "primary_key": True,
+        },
+        {
             "column_name": "team",
             "column_type": "VARCHAR (255)",
             "not_null": True,
@@ -10,7 +15,7 @@ fbref_team_players_standard = {
         {
             "column_name": "player",
             "column_type": "VARCHAR (255)",
-            "primary_key": True,
+            "not_null": True,
         },
         {
             "column_name": "nationality",
