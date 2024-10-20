@@ -1,9 +1,9 @@
-from fpl_api.FPL_API import FPL_API
-from utils.set_df_dtypes import set_df_dtypes
-from utils.clean_cell_data import clean_cell_data
-from pg.PG import PG
-
 import pandas as pd
+
+from fpl_api.FPL_API import FPL_API
+from pg.PG import PG
+from utils.clean_cell_data import clean_cell_data
+from utils.set_df_dtypes import set_df_dtypes
 
 pg = PG(dbname="postgres", user="postgres")
 

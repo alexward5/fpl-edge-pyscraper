@@ -1,7 +1,7 @@
 import warnings
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 def sql_column_configs_from_df(df: pd.DataFrame) -> None:

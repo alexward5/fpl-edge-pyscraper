@@ -1,8 +1,9 @@
-from time import sleep
-from utils.find_dict_in_list import find_dict_in_list
-
 import csv
+from time import sleep
+
 import requests
+
+from utils.find_dict_in_list import find_dict_in_list
 
 
 class FPL_API:
