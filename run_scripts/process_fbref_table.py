@@ -48,6 +48,7 @@ def process_fbref_table(
         # For each child table URL, recursively process child table
         for index, child_table_url in enumerate(child_table_urls):
             run_args = {
+                "schema_name": schema_name,
                 "table_url": child_table_url,
                 "fbref_table_config": child_table_config,
             }
