@@ -1,10 +1,12 @@
 import pandas as pd
 
+from utils.fill_df_missing_values import fill_df_missing_values
 from utils.set_df_dtypes import set_df_dtypes
 
 
 def sql_column_configs_from_df(df: pd.DataFrame) -> None:
     df = set_df_dtypes(df)
+    df = fill_df_missing_values(df)
 
     temp = []
     for column, dtype in df.dtypes.items():
