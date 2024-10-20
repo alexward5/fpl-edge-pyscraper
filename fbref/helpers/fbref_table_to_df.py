@@ -1,11 +1,10 @@
-import warnings
 from typing import Optional
 
-import numpy as np
 import pandas as pd
 
 from fbref.FBRef_Table import FBRef_Table
 from utils.clean_cell_data import clean_cell_data
+from utils.set_df_dtypes import set_df_dtypes
 
 
 def fbref_table_to_df(
@@ -32,18 +31,8 @@ def fbref_table_to_df(
     if parent_field:
         df[parent_field["data_stat"]] = parent_field["data_value"]
 
-    # Infer data types of each column
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=FutureWarning)
-        df = df.apply(pd.to_numeric, errors="ignore")
-    df = df.convert_dtypes()
-
-    # Fill in missing values with zeros for all numeric columns
-    for numeric_column in df.select_dtypes(include=np.number).columns:
-        df[numeric_column] = df[numeric_column].fillna(0)
-
-    # Fill in remaining missing values with empty strings
-    df = df.fillna("")
+    # Set data types of columns in dataframe
+    df = set_df_dtypes(df)
 
     print(df)
     return df
