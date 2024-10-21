@@ -2,7 +2,7 @@ from typing import Optional
 
 from fbref.FBRef_Table import FBRef_Table
 from fbref.helpers.fbref_table_to_df import fbref_table_to_df
-from fbref.helpers.generate_row_ids import generate_row_ids
+from utils.generate_row_ids import generate_row_ids
 from fbref.helpers.get_child_table_urls import get_child_table_urls
 from pg.PG import PG
 
@@ -24,7 +24,11 @@ def process_fbref_table(
 
     # If configured, generate unique ids for each row in dataframe using row id input fields
     if fbref_table_config.get("row_id_input_fields"):
-        generate_row_ids(fbref_table_df, fbref_table_config["row_id_input_fields"])
+        generate_row_ids(
+            fbref_table_df,
+            fbref_table_config["row_id_input_fields"],
+            row_id_column_name="fbref_row_id",
+        )
 
     # Insert dataframe rows into postgres table
     for _, row in fbref_table_df.iterrows():
