@@ -5,8 +5,8 @@ from utils.set_df_dtypes import set_df_dtypes
 
 
 def sql_column_configs_from_df(df: pd.DataFrame) -> None:
-    set_df_dtypes(df)
-    fill_df_missing_values(df)
+    df = set_df_dtypes(df)
+    df = fill_df_missing_values(df)
 
     temp = []
     for column, dtype in df.dtypes.items():
