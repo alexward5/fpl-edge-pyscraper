@@ -23,8 +23,6 @@ def process_fpl_api_data() -> None:
         row_id_column_name="fpl_row_id",
     )
 
-    print(fpl_players_df)
-
     # Insert dataframe rows into postgres table
     for _, row in fpl_players_df.iterrows():
         cleaned_row_values = [clean_cell_data(val) for val in row.to_list()]
