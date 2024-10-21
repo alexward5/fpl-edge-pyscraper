@@ -2,6 +2,11 @@ fpl_player_data = {
     "table_name": "fpl_player_data",
     "table_column_configs": [
         {
+            "column_name": "fpl_row_id",
+            "column_type": "VARCHAR (255)",
+            "primary_key": True,
+        },
+        {
             "column_name": "chance_of_playing_next_round",
             "column_type": "INT",
             "not_null": True,
