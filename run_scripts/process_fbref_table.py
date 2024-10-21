@@ -25,8 +25,8 @@ def process_fbref_table(
     # If configured, generate unique ids for each row in dataframe using row id input fields
     if fbref_table_config.get("row_id_input_fields"):
         generate_row_ids(
-            fbref_table_df,
-            fbref_table_config["row_id_input_fields"],
+            df=fbref_table_df,
+            row_id_input_fields=fbref_table_config["row_id_input_fields"],
             row_id_column_name="fbref_row_id",
         )
 
