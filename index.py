@@ -6,7 +6,7 @@ from run_scripts.process_fpl_api_data import process_fpl_api_data
 SCHEMA_NAME = "test_schema_new"
 
 CREATE_SCHEMA_AND_TABLES = True
-PROCESS_FBREF_TABLES = True
+PROCESS_FBREF_TABLES = False
 PROCESS_FPL_API_DATA = True
 
 if CREATE_SCHEMA_AND_TABLES:

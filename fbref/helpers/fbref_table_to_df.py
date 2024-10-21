@@ -33,7 +33,7 @@ def fbref_table_to_df(
         df[parent_field["data_stat"]] = parent_field["data_value"]
 
     # Set data types of columns in dataframe
-    df = set_df_dtypes(df)
-    df = fill_df_missing_values(df)
+    set_df_dtypes(df)
+    fill_df_missing_values(df)
 
     return df

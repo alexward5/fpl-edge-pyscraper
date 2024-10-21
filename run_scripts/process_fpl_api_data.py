@@ -4,6 +4,7 @@ from fpl_api.FPL_API import FPL_API
 from pg.PG import PG
 from utils.clean_cell_data import clean_cell_data
 from utils.fill_df_missing_values import fill_df_missing_values
+from utils.generate_row_ids import generate_row_ids
 from utils.set_df_dtypes import set_df_dtypes
 
 pg = PG(dbname="postgres", user="postgres")
@@ -13,8 +14,12 @@ def process_fpl_api_data() -> None:
     fpl_api_data = FPL_API()
 
     fpl_players_df = pd.DataFrame.from_records(fpl_api_data.player_data)
-    fpl_players_df = set_df_dtypes(fpl_players_df)
-    fpl_players_df = fill_df_missing_values(fpl_players_df)
+
+    set_df_dtypes(fpl_players_df)
+    fill_df_missing_values(fpl_players_df)
+    generate_row_ids(
+        fpl_players_df, ["first_name", "second_name", "fbref_team_name"], "fpl_row_id"
+    )
 
     # Insert dataframe rows into postgres table
     for _, row in fpl_players_df.iterrows():
