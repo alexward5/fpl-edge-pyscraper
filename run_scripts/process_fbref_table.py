@@ -30,6 +30,8 @@ def process_fbref_table(
             row_id_column_name="fbref_row_id",
         )
 
+    print(fbref_table_df)
+
     # Insert dataframe rows into postgres table
     for _, row in fbref_table_df.iterrows():
         pg.insert_row(

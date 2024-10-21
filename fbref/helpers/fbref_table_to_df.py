@@ -36,5 +36,4 @@ def fbref_table_to_df(
     df = set_df_dtypes(df)
     df = fill_df_missing_values(df)
 
-    print(df)
     return df
