@@ -1,12 +1,13 @@
 from typing import Any, Optional
 
-import psycopg
-from psycopg import sql
+import psycopg2
+import psycopg2.extras
+from psycopg2 import sql
 
 
 class PG:
     def __init__(self, dbname: str, user: str):
-        self.conn = psycopg.connect(f"dbname={dbname} user={user}")
+        self.conn = psycopg2.connect(f"dbname={dbname} user={user}")
 
     def __del__(self):
         self.conn.close()
@@ -79,7 +80,7 @@ class PG:
         if columns:
             query_columns = ",".join(columns)
 
-        with self.conn.cursor() as cur:
+        with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             cur.execute(
                 sql.SQL("SELECT {query_columns} FROM {schema}.{table_name}").format(
                     query_columns=sql.SQL(query_columns),  # type: ignore
