@@ -17,7 +17,10 @@ class FBRef_Table:
 
         self._table_rows_raw: list = []
 
-        table_html: str = requests.get(table_url).text
+        response = requests.get(table_url)
+        response.raise_for_status()
+
+        table_html = response.text
 
         # Sleep for 10s to avoid reaching rate limit
         sleep(10)
