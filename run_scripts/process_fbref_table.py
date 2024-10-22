@@ -2,9 +2,9 @@ from typing import Optional
 
 from fbref.FBRef_Table import FBRef_Table
 from fbref.helpers.fbref_table_to_df import fbref_table_to_df
-from utils.generate_row_ids import generate_row_ids
 from fbref.helpers.get_child_table_urls import get_child_table_urls
 from pg.PG import PG
+from utils.generate_row_ids import generate_row_ids
 
 pg = PG(dbname="postgres", user="postgres")
 
