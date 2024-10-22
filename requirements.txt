@@ -10,9 +10,8 @@ mypy==1.10.1
 mypy-extensions==1.0.0
 numpy==2.0.0
 pandas==2.2.2
-psycopg==3.2.1
-psycopg-binary==3.2.1
-psycopg-pool==3.2.2
+pandas-stubs==2.2.2.240909
+psycopg2-binary==2.9.10
 pycodestyle==2.12.0
 pyflakes==3.2.0
 python-dateutil==2.9.0.post0
@@ -22,6 +21,8 @@ six==1.16.0
 soupsieve==2.5
 types-beautifulsoup4==4.12.0.20240511
 types-html5lib==1.1.11.20240228
+types-psycopg2==2.9.21.20241019
+types-pytz==2024.2.0.20240913
 types-requests==2.32.0.20240622
 typing_extensions==4.12.2
 tzdata==2024.1
