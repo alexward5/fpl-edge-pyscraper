@@ -27,10 +27,10 @@ class FPL_API:
 
         # Check that fpl season data exists before proceeding
         if self._api_response_raw.get("events"):
-            self._parse_team_code_mapping()
+            self._get_team_code_mapping()
             self._parse_player_data()
 
-    def _parse_team_code_mapping(self) -> None:
+    def _get_team_code_mapping(self) -> None:
         # Map fpl team codes to fbref team names
         team_name_mappings = []
         with open("fpl_api/mappings/team_names.csv", "r") as csvfile:
