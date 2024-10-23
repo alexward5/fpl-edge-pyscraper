@@ -5,6 +5,7 @@ from fuzzywuzzy import fuzz, process
 
 from pg.PG import PG
 from utils.find_dict_in_list import find_dict_in_list
+from utils.clean_cell_data import clean_cell_data
 
 pg = PG(dbname="postgres", user="postgres")
 
@@ -101,10 +102,10 @@ def generate_player_crosswalk() -> None:
                         {
                             "fpl_player_id": fpl_player_dict["fpl_row_id"],
                             "fbref_player_id": fbref_player_dict["fbref_row_id"],
-                            "fpl_player_name": fpl_player_name,
-                            "fbref_player_name": player_name_mapping[
-                                "fbref_player_name"
-                            ],
+                            "fpl_player_name": clean_cell_data(fpl_player_name),
+                            "fbref_player_name": clean_cell_data(
+                                player_name_mapping["fbref_player_name"]
+                            ),
                         }
                     )
                 else:
@@ -123,12 +124,19 @@ def generate_player_crosswalk() -> None:
                         {
                             "fpl_player_id": fpl_player_dict["fpl_row_id"],
                             "fbref_player_id": fbref_player_dict["fbref_row_id"],
-                            "fpl_player_name": fpl_player_name,
-                            "fbref_player_name": match[0],
+                            "fpl_player_name": clean_cell_data(fpl_player_name),
+                            "fbref_player_name": clean_cell_data(match[0]),
                         }
                     )
 
         # Create df containing player crosswalk data
         player_id_crosswalk_df = pd.DataFrame(player_id_crosswalk)
 
-        print(player_id_crosswalk_df)
+        # Insert dataframe rows into postgres table
+        for _, row in player_id_crosswalk_df.iterrows():
+            pg.insert_row(
+                schema=SCHEMA_NAME,
+                table_name="player_id_crosswalk",
+                column_names=player_id_crosswalk_df.columns.to_list(),
+                row_values=row.to_list(),
+            )
