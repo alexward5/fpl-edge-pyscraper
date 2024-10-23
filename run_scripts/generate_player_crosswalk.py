@@ -78,6 +78,7 @@ def generate_player_crosswalk() -> None:
             )
             if match:
                 match_score = match[1]
+                # If the match score is less than 70, use custom player name mapping
                 if match_score < 70:
                     player_name_mapping = find_dict_in_list(
                         list_of_dicts=player_name_mappings,
@@ -88,6 +89,7 @@ def generate_player_crosswalk() -> None:
                         raise ValueError(
                             f"Custom player name mapping not found for: {fpl_player_name}"
                         )
+
                     matches.append(
                         [
                             fpl_player_name,
