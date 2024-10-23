@@ -74,7 +74,11 @@ class PG:
             self.conn.commit()
 
     def query_table(
-        self, schema: str, table_name: str, columns: Optional[list[str]] = None
+        self,
+        schema: str,
+        table_name: str,
+        columns: Optional[list[str]] = None,
+        where_clause: Optional[str] = "",
     ) -> list[Any]:
         query_columns = "*"
         if columns:
@@ -82,10 +86,13 @@ class PG:
 
         with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             cur.execute(
-                sql.SQL("SELECT {query_columns} FROM {schema}.{table_name}").format(
+                sql.SQL(
+                    "SELECT {query_columns} FROM {schema}.{table_name} {where_clause}"
+                ).format(
                     query_columns=sql.SQL(query_columns),  # type: ignore
                     schema=sql.Identifier(schema),
                     table_name=sql.Identifier(table_name),
+                    where_clause=sql.SQL(where_clause),  # type: ignore
                 ),
             )
 
