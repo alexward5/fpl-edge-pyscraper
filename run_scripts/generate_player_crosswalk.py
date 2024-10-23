@@ -1,8 +1,8 @@
 import csv
-import pandas as pd
 
-from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
+import pandas as pd
+from fuzzywuzzy import fuzz, process
+
 from pg.PG import PG
 from utils.find_dict_in_list import find_dict_in_list
 
