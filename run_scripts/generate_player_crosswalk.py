@@ -94,7 +94,7 @@ def generate_player_crosswalk() -> None:
 
                     if not fbref_player_dict:
                         raise ValueError(
-                            f"FBRef player not found for: {fpl_player_name}"
+                            f"Unable to find matching FBRef player for FPL name: {fpl_player_name}"
                         )
 
                     player_id_crosswalk.append(
@@ -116,7 +116,7 @@ def generate_player_crosswalk() -> None:
 
                     if not fbref_player_dict:
                         raise ValueError(
-                            f"FBRef player not found for: {fpl_player_name}"
+                            f"Unable to find matching FBRef player for FPL name: {fpl_player_name}"
                         )
 
                     player_id_crosswalk.append(
