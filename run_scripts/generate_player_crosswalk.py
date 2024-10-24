@@ -58,7 +58,7 @@ def generate_player_crosswalk() -> None:
         dict_reader = csv.DictReader(csvfile)
         player_name_mappings = [row for row in dict_reader]
 
-    # Generate crosswalk
+    # Iterate through each team to populate player crosswalk table
     for team_name in fpl_player_data_by_team:
         fpl_player_data = fpl_player_data_by_team[team_name]
         fbref_player_data = fbref_player_data_by_team[team_name]
@@ -108,6 +108,7 @@ def generate_player_crosswalk() -> None:
                             ),
                         }
                     )
+                # Player name match found, use fbref player name to get fbref player id
                 else:
                     fbref_player_dict = find_dict_in_list(
                         fbref_player_data,
