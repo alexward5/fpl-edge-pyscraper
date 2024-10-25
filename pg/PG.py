@@ -99,3 +99,22 @@ class PG:
             rows = cur.fetchall()
 
         return rows
+
+    def create_view(
+        self,
+        schema: str,
+        view_name: str,
+        view_query: Any,
+    ) -> None:
+        with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                sql.SQL(
+                    "CREATE OR REPLACE VIEW {schema}.{view_name} AS {view_query}"
+                ).format(
+                    schema=sql.Identifier(schema),
+                    view_name=sql.Identifier(view_name),
+                    view_query=sql.SQL(view_query),
+                ),
+            )
+
+            self.conn.commit()
