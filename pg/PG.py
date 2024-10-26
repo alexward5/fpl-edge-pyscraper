@@ -108,6 +108,13 @@ class PG:
     ) -> None:
         with self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             cur.execute(
+                sql.SQL("DROP VIEW IF EXISTS {schema}.{view_name}").format(
+                    schema=sql.Identifier(schema),
+                    view_name=sql.Identifier(view_name),
+                ),
+            )
+
+            cur.execute(
                 sql.SQL(
                     "CREATE OR REPLACE VIEW {schema}.{view_name} AS {view_query}"
                 ).format(
