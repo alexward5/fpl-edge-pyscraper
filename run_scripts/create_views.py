@@ -12,7 +12,12 @@ def create_player_views() -> None:
         view_query=(
             "SELECT "
             "fpl_player_data.code as fpl_player_code,"
-            "fpl_player_data.element_type as fpl_player_position,"
+            "CASE "
+            "WHEN fpl_player_data.element_type = 1 THEN 'GK' "
+            "WHEN fpl_player_data.element_type = 2 THEN 'DEF' "
+            "WHEN fpl_player_data.element_type = 3 THEN 'MID' "
+            "WHEN fpl_player_data.element_type = 4 THEN 'FWD' "
+            "END as fpl_player_position,"
             "ROUND(CAST(fpl_player_data.now_cost AS DECIMAL) / 10,1) as fpl_player_cost,"
             "fpl_player_data.selected_by_percent as fpl_selected_by_percent,"
             "fpl_player_data.total_points as fpl_total_points,"
