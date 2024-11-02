@@ -9,15 +9,13 @@ from utils.clean_cell_data import clean_cell_data
 
 pg = PG(dbname="postgres", user="postgres")
 
-SCHEMA_NAME = "test_schema_new"
 
-
-def generate_player_crosswalk() -> None:
+def generate_player_crosswalk(schema_name: str) -> None:
     # Create dict of fpl players where each key is a team name and each value is a list of player dicts
     fpl_player_data_by_team: dict[str, list[dict]] = {}
 
     fpl_player_data = pg.query_table(
-        schema=SCHEMA_NAME,
+        schema=schema_name,
         table_name="fpl_player_data",
         columns=["first_name", "second_name", "fbref_team_name", "fpl_row_id"],
         # Filter out players who have played zero minutes and players who have been removed from game
@@ -39,7 +37,7 @@ def generate_player_crosswalk() -> None:
     fbref_player_data_by_team: dict[str, list[dict]] = {}
 
     fbref_player_data = pg.query_table(
-        schema=SCHEMA_NAME,
+        schema=schema_name,
         table_name="fbref_team_players_standard",
         columns=["player as name", "team", "fbref_row_id"],
     )
@@ -136,7 +134,7 @@ def generate_player_crosswalk() -> None:
         # Insert dataframe rows into postgres table
         for _, row in player_id_crosswalk_df.iterrows():
             pg.insert_row(
-                schema=SCHEMA_NAME,
+                schema=schema_name,
                 table_name="player_id_crosswalk",
                 column_names=player_id_crosswalk_df.columns.to_list(),
                 row_values=row.to_list(),

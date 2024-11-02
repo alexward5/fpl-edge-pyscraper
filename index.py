@@ -5,7 +5,7 @@ from run_scripts.generate_player_crosswalk import generate_player_crosswalk
 from run_scripts.process_fbref_table import process_fbref_table
 from run_scripts.process_fpl_api_data import process_fpl_api_data
 
-SCHEMA_NAME = "test_schema_new"
+SCHEMA_NAME = "test_schema"
 
 CREATE_SCHEMA_AND_TABLES = False
 PROCESS_FBREF_TABLES = False
@@ -24,10 +24,10 @@ if PROCESS_FBREF_TABLES:
     )
 
 if PROCESS_FPL_API_DATA:
-    process_fpl_api_data()
+    process_fpl_api_data(schema_name=SCHEMA_NAME)
 
 if GENERATE_PLAYER_CROSSWALK:
-    generate_player_crosswalk()
+    generate_player_crosswalk(schema_name=SCHEMA_NAME)
 
 if CREATE_PLAYER_VIEWS:
-    create_views()
+    create_views(schema_name=SCHEMA_NAME)

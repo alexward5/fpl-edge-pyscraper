@@ -9,10 +9,8 @@ from utils.set_df_dtypes import set_df_dtypes
 
 pg = PG(dbname="postgres", user="postgres")
 
-SCHEMA_NAME = "test_schema_new"
 
-
-def process_fpl_api_data() -> None:
+def process_fpl_api_data(schema_name: str) -> None:
     fpl_api_data = FPL_API()
 
     fpl_players_df = pd.DataFrame.from_records(fpl_api_data.player_data)
@@ -30,7 +28,7 @@ def process_fpl_api_data() -> None:
         cleaned_row_values = [clean_cell_data(val) for val in row.to_list()]
 
         pg.insert_row(
-            schema=SCHEMA_NAME,
+            schema=schema_name,
             table_name="fpl_player_data",
             column_names=fpl_players_df.columns.to_list(),
             row_values=cleaned_row_values,

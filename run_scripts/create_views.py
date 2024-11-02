@@ -2,12 +2,10 @@ from pg.PG import PG
 
 pg = PG(dbname="postgres", user="postgres")
 
-SCHEMA_NAME = "test_schema_new"
 
-
-def create_player_view() -> None:
+def create_player_view(schema_name: str) -> None:
     pg.create_view(
-        schema=SCHEMA_NAME,
+        schema=schema_name,
         view_name="v_player_data",
         view_query=(
             "SELECT "
@@ -45,14 +43,14 @@ def create_player_view() -> None:
             "WHEN fpl_player_data.element_type = 3 THEN (fbref_player_data.npxg * 5) + (fbref_player_data.npxg_xg_assist * 3) "  # noqa
             "WHEN fpl_player_data.element_type = 4 THEN (fbref_player_data.npxg * 4) + (fbref_player_data.npxg_xg_assist * 3) "  # noqa
             "END as calc_fpl_npxp "
-            f"FROM {SCHEMA_NAME}.fpl_player_data fpl_player_data "
-            f"JOIN {SCHEMA_NAME}.player_id_crosswalk cw "
+            f"FROM {schema_name}.fpl_player_data fpl_player_data "
+            f"JOIN {schema_name}.player_id_crosswalk cw "
             "ON fpl_player_data.fpl_row_id = cw.fpl_player_id "
-            f"JOIN {SCHEMA_NAME}.fbref_team_players_standard fbref_player_data "
+            f"JOIN {schema_name}.fbref_team_players_standard fbref_player_data "
             "ON fbref_player_data.fbref_row_id = cw.fbref_player_id"
         ),
     )
 
 
-def create_views() -> None:
-    create_player_view()
+def create_views(schema_name: str) -> None:
+    create_player_view(schema_name=schema_name)
