@@ -20,6 +20,7 @@ def create_player_views() -> None:
             "END as fpl_player_position,"
             "ROUND(CAST(fpl_player_data.now_cost AS DECIMAL) / 10,1) as fpl_player_cost,"
             "fpl_player_data.selected_by_percent as fpl_selected_by_percent,"
+            "fpl_player_data.minutes as fpl_minutes,"
             "fpl_player_data.total_points as fpl_total_points,"
             "fpl_player_data.goals_scored as fpl_goals_scored,"
             "fpl_player_data.assists as fpl_assists,"
@@ -37,7 +38,13 @@ def create_player_views() -> None:
             "fbref_player_data.npxg_xg_assist as fbref_npxg_xg_assist,"
             "fbref_player_data.progressive_carries as fbref_progressive_carries,"
             "fbref_player_data.progressive_passes as fbref_progressive_passes,"
-            "fbref_player_data.progressive_passes_received as fbref_progressive_passes_received "
+            "fbref_player_data.progressive_passes_received as fbref_progressive_passes_received, "
+            "CASE "
+            "WHEN fpl_player_data.element_type = 1 THEN (fbref_player_data.npxg * 10) + (fbref_player_data.npxg_xg_assist * 3) "  # noqa
+            "WHEN fpl_player_data.element_type = 2 THEN (fbref_player_data.npxg * 6) + (fbref_player_data.npxg_xg_assist * 3) "  # noqa
+            "WHEN fpl_player_data.element_type = 3 THEN (fbref_player_data.npxg * 5) + (fbref_player_data.npxg_xg_assist * 3) "  # noqa
+            "WHEN fpl_player_data.element_type = 4 THEN (fbref_player_data.npxg * 4) + (fbref_player_data.npxg_xg_assist * 3) "  # noqa
+            "END as calc_fpl_npxp "
             f"FROM {SCHEMA_NAME}.fpl_player_data fpl_player_data "
             f"JOIN {SCHEMA_NAME}.player_id_crosswalk cw "
             "ON fpl_player_data.fpl_row_id = cw.fpl_player_id "
