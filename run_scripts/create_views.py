@@ -5,7 +5,7 @@ pg = PG(dbname="postgres", user="postgres")
 SCHEMA_NAME = "test_schema_new"
 
 
-def create_player_views() -> None:
+def create_player_view() -> None:
     pg.create_view(
         schema=SCHEMA_NAME,
         view_name="v_player_data",
@@ -55,4 +55,4 @@ def create_player_views() -> None:
 
 
 def create_views() -> None:
-    create_player_views()
+    create_player_view()
