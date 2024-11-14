@@ -58,6 +58,10 @@ def generate_player_crosswalk(schema_name: str) -> None:
 
     # Iterate through each team to populate player crosswalk table
     for team_name in fpl_player_data_by_team:
+        # Skip teams that are not in fbref player data
+        if not fbref_player_data_by_team.get(team_name):
+            continue
+
         fpl_player_data = fpl_player_data_by_team[team_name]
         fbref_player_data = fbref_player_data_by_team[team_name]
 
