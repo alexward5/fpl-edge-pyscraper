@@ -13,13 +13,13 @@ def process_fbref_table(
     schema_name: str,
     table_url: str,
     fbref_table_config: dict,
-    parent_field: Optional[dict] = None,
+    parent_fields: Optional[dict] = None,
 ):
     fbref_table = FBRef_Table(table_url=table_url, table_config=fbref_table_config)
 
     # Create pandas dataframe using data from fbref table
     fbref_table_df = fbref_table_to_df(
-        fbref_table=fbref_table, parent_field=parent_field
+        fbref_table=fbref_table, parent_fields=parent_fields
     )
 
     # If configured, generate unique ids for each row in dataframe using row id input fields
@@ -60,11 +60,11 @@ def process_fbref_table(
             }
 
             # Add parent field to run args if set in config
-            if child_table_config.get("include_parent_field"):
-                run_args["parent_field"] = {
-                    "data_stat": child_table_config["include_parent_field"],
+            if child_table_config.get("include_parent_fields"):
+                run_args["parent_fields"] = {
+                    "data_stat": child_table_config["include_parent_fields"],
                     "data_value": fbref_table_df.loc[
-                        index, child_table_config["include_parent_field"]
+                        index, child_table_config["include_parent_fields"]
                     ],
                 }
 
