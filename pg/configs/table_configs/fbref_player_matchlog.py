@@ -12,6 +12,11 @@ fbref_player_matchlog = {
             "not_null": True,
         },
         {
+            "column_name": "team",
+            "column_type": "VARCHAR (255)",
+            "not_null": True,
+        },
+        {
             "column_name": "date",
             "column_type": "VARCHAR (255)",
             "not_null": True,
@@ -38,11 +43,6 @@ fbref_player_matchlog = {
         },
         {
             "column_name": "result",
-            "column_type": "VARCHAR (255)",
-            "not_null": True,
-        },
-        {
-            "column_name": "team",
             "column_type": "VARCHAR (255)",
             "not_null": True,
         },
