@@ -2,7 +2,7 @@ fpl_player_data = {
     "table_name": "fpl_player_data",
     "table_column_configs": [
         {
-            "column_name": "fpl_row_id",
+            "column_name": "fpl_player_id",
             "column_type": "VARCHAR (255)",
             "primary_key": True,
         },

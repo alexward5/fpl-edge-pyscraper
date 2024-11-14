@@ -2,7 +2,7 @@ fbref_team_players_standard = {
     "table_name": "fbref_team_players_standard",
     "table_column_configs": [
         {
-            "column_name": "fbref_row_id",
+            "column_name": "fbref_player_id",
             "column_type": "VARCHAR (255)",
             "primary_key": True,
         },

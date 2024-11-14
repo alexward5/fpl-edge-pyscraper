@@ -2,9 +2,14 @@ fbref_player_matchlog = {
     "table_name": "fbref_player_matchlog",
     "table_column_configs": [
         {
-            "column_name": "fbref_row_id",
+            "column_name": "fbref_player_matchlog_id",
             "column_type": "VARCHAR (255)",
             "primary_key": True,
+        },
+        {
+            "column_name": "fbref_player_id",
+            "column_type": "VARCHAR (255)",
+            "not_null": True,
         },
         {
             "column_name": "player",
