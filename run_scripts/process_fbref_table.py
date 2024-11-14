@@ -13,7 +13,7 @@ def process_fbref_table(
     schema_name: str,
     table_url: str,
     fbref_table_config: dict,
-    parent_fields: Optional[dict] = None,
+    parent_fields: Optional[list[dict]] = None,
 ):
     fbref_table = FBRef_Table(table_url=table_url, table_config=fbref_table_config)
 
@@ -59,13 +59,18 @@ def process_fbref_table(
                 "fbref_table_config": child_table_config,
             }
 
-            # Add parent field to run args if set in config
+            # Add parent fields to run args if set in config
+            parent_fields = []
             if child_table_config.get("include_parent_fields"):
-                run_args["parent_fields"] = {
-                    "data_stat": child_table_config["include_parent_fields"],
-                    "data_value": fbref_table_df.loc[
-                        index, child_table_config["include_parent_fields"]
-                    ],
-                }
+                parent_fields.append(
+                    {
+                        "data_stat": child_table_config["include_parent_fields"],
+                        "data_value": fbref_table_df.loc[
+                            index, child_table_config["include_parent_fields"]
+                        ],
+                    }
+                )
+
+            run_args["parent_fields"] = parent_fields
 
             process_fbref_table(**run_args)

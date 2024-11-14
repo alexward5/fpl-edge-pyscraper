@@ -10,7 +10,7 @@ from utils.set_df_dtypes import set_df_dtypes
 
 def fbref_table_to_df(
     fbref_table: FBRef_Table,
-    parent_fields: Optional[dict] = None,
+    parent_fields: Optional[list[dict]] = None,
 ):
     # Create pandas dataframe using data from fbref table
     df_dict: dict[str, list] = {}
@@ -30,7 +30,8 @@ def fbref_table_to_df(
 
     # Add parent field to new column in dataframe
     if parent_fields:
-        df[parent_fields["data_stat"]] = parent_fields["data_value"]
+        for parent_field in parent_fields:
+            df[parent_field["data_stat"]] = parent_field["data_value"]
 
     # Set data types of columns in dataframe
     df = set_df_dtypes(df)
