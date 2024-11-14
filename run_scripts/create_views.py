@@ -9,6 +9,8 @@ def create_player_view(schema_name: str) -> None:
         view_name="v_player_data",
         view_query=(
             "SELECT "
+            "cw.fpl_player_id as fpl_player_row_id,"
+            "cw.fbref_player_id as fbref_player_row_id,"
             "fpl_player_data.code as fpl_player_code,"
             "CASE "
             "WHEN fpl_player_data.element_type = 1 THEN 'GK' "
