@@ -20,7 +20,7 @@ def process_fpl_api_data(schema_name: str) -> None:
     fpl_players_df = generate_row_ids(
         df=fpl_players_df,
         row_id_input_fields=["first_name", "second_name", "fbref_team_name"],
-        row_id_column_name="fpl_row_id",
+        row_id_column_name="fpl_player_id",
     )
 
     # Insert dataframe rows into postgres table

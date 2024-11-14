@@ -23,11 +23,13 @@ def process_fbref_table(
     )
 
     # If configured, generate unique ids for each row in dataframe using row id input fields
-    if fbref_table_config.get("row_id_input_fields"):
+    if fbref_table_config.get("row_id_config"):
         fbref_table_df = generate_row_ids(
             df=fbref_table_df,
-            row_id_input_fields=fbref_table_config["row_id_input_fields"],
-            row_id_column_name="fbref_row_id",
+            row_id_input_fields=fbref_table_config["row_id_config"][
+                "row_id_input_fields"
+            ],
+            row_id_column_name=fbref_table_config["row_id_config"]["column_name"],
         )
 
     print(fbref_table_df)

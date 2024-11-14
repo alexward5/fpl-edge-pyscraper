@@ -17,7 +17,7 @@ def generate_player_crosswalk(schema_name: str) -> None:
     fpl_player_data = pg.query_table(
         schema=schema_name,
         table_name="fpl_player_data",
-        columns=["first_name", "second_name", "fbref_team_name", "fpl_row_id"],
+        columns=["first_name", "second_name", "fbref_team_name", "fpl_player_id"],
         # Filter out players who have played zero minutes and players who have been removed from game
         where_clause="WHERE minutes > 0 and status != 'u'",
     )
@@ -39,7 +39,7 @@ def generate_player_crosswalk(schema_name: str) -> None:
     fbref_player_data = pg.query_table(
         schema=schema_name,
         table_name="fbref_team_players_standard",
-        columns=["player as name", "team", "fbref_row_id"],
+        columns=["player as name", "team", "fbref_player_id"],
     )
 
     for fbref_player in fbref_player_data:
@@ -102,8 +102,8 @@ def generate_player_crosswalk(schema_name: str) -> None:
 
                     player_id_crosswalk.append(
                         {
-                            "fpl_player_id": fpl_player_dict["fpl_row_id"],
-                            "fbref_player_id": fbref_player_dict["fbref_row_id"],
+                            "fpl_player_id": fpl_player_dict["fpl_player_id"],
+                            "fbref_player_id": fbref_player_dict["fbref_player_id"],
                             "fpl_player_name": clean_cell_data(fpl_player_name),
                             "fbref_player_name": clean_cell_data(
                                 player_name_mapping["fbref_player_name"]
@@ -125,8 +125,8 @@ def generate_player_crosswalk(schema_name: str) -> None:
 
                     player_id_crosswalk.append(
                         {
-                            "fpl_player_id": fpl_player_dict["fpl_row_id"],
-                            "fbref_player_id": fbref_player_dict["fbref_row_id"],
+                            "fpl_player_id": fpl_player_dict["fpl_player_id"],
+                            "fbref_player_id": fbref_player_dict["fbref_player_id"],
                             "fpl_player_name": clean_cell_data(fpl_player_name),
                             "fbref_player_name": clean_cell_data(match[0]),
                         }
