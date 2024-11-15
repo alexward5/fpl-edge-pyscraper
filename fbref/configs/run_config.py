@@ -24,6 +24,12 @@ fbref_table_config: dict[str, Any] = {
         },
         "hyperlink_data_stat": "team",
         "include_parent_fields": "team",
+        "column_transforms": [
+            {
+                "column_name": "age",
+                "transform": "lambda x: x.split('-')[0]",
+            }
+        ],
         "child_table_config": {
             "table_name": "fbref_player_matchlog",
             "table_index": 0,

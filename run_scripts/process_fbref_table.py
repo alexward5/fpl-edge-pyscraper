@@ -32,6 +32,15 @@ def process_fbref_table(
             row_id_column_name=fbref_table_config["row_id_config"]["column_name"],
         )
 
+    # If configured, apply column transformation logic to dataframe
+    if fbref_table_config.get("column_transforms"):
+        for transform in fbref_table_config["column_transforms"]:
+            transform_fn = eval(transform["transform"])
+
+            fbref_table_df[transform["column_name"]] = fbref_table_df[
+                transform["column_name"]
+            ].apply(transform_fn)
+
     print(fbref_table_df)
 
     # Insert dataframe rows into postgres table
