@@ -23,7 +23,7 @@ fbref_table_config: dict[str, Any] = {
             "row_id_input_fields": ["player", "team"],
         },
         "hyperlink_data_stat": "team",
-        "include_parent_fields": "team",
+        "include_parent_fields": ["team"],
         "column_transforms": [
             {
                 "column_name": "age",

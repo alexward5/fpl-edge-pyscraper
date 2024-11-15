@@ -73,14 +73,13 @@ def process_fbref_table(
             # Add parent fields to run args if set in config
             parent_fields = []
             if child_table_config.get("include_parent_fields"):
-                parent_fields.append(
-                    {
-                        "data_stat": child_table_config["include_parent_fields"],
-                        "data_value": fbref_table_df.loc[
-                            index, child_table_config["include_parent_fields"]
-                        ],
-                    }
-                )
+                for parent_field in child_table_config["include_parent_fields"]:
+                    parent_fields.append(
+                        {
+                            "data_stat": parent_field,
+                            "data_value": fbref_table_df.loc[index, parent_field],
+                        }
+                    )
 
             run_args["parent_fields"] = parent_fields
 
