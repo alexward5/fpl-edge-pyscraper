@@ -38,7 +38,7 @@ fbref_player_matchlog = {
         },
         {
             "column_name": "round",
-            "column_type": "VARCHAR (255)",
+            "column_type": "INT",
             "not_null": True,
         },
         {
