@@ -69,7 +69,7 @@ def process_fbref_table(
         )
 
         # For each child table URL, recursively process child table
-        for index, child_table_url in enumerate(child_table_urls):
+        for row_index, child_table_url in enumerate(child_table_urls):
             run_args = {
                 "schema_name": schema_name,
                 "table_url": child_table_url,
@@ -83,7 +83,7 @@ def process_fbref_table(
                     parent_fields.append(
                         {
                             "data_stat": parent_field,
-                            "data_value": fbref_table_df.loc[index, parent_field],
+                            "data_value": fbref_table_df.loc[row_index, parent_field],
                         }
                     )
 
