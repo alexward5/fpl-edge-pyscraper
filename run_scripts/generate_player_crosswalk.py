@@ -4,8 +4,8 @@ import pandas as pd
 from fuzzywuzzy import fuzz, process
 
 from pg.PG import PG
-from utils.find_dict_in_list import find_dict_in_list
 from utils.clean_cell_data import clean_cell_data
+from utils.find_dict_in_list import find_dict_in_list
 
 pg = PG(dbname="postgres", user="postgres")
 

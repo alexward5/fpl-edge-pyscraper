@@ -4,7 +4,9 @@ from fbref.FBRef_Table import FBRef_Table
 from fbref.helpers.fbref_table_to_df import fbref_table_to_df
 from fbref.helpers.get_child_table_urls import get_child_table_urls
 from pg.PG import PG
+from utils.fill_df_missing_values import fill_df_missing_values
 from utils.generate_row_ids import generate_row_ids
+from utils.set_df_dtypes import set_df_dtypes
 
 pg = PG(dbname="postgres", user="postgres")
 
@@ -40,6 +42,10 @@ def process_fbref_table(
             fbref_table_df[transform["column_name"]] = fbref_table_df[
                 transform["column_name"]
             ].apply(transform_fn)
+
+    # Set data types of columns in dataframe
+    fbref_table_df = set_df_dtypes(fbref_table_df)
+    fbref_table_df = fill_df_missing_values(fbref_table_df)
 
     print(fbref_table_df)
 

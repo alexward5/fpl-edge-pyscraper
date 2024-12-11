@@ -4,8 +4,6 @@ import pandas as pd
 
 from fbref.FBRef_Table import FBRef_Table
 from utils.clean_cell_data import clean_cell_data
-from utils.fill_df_missing_values import fill_df_missing_values
-from utils.set_df_dtypes import set_df_dtypes
 
 
 def fbref_table_to_df(
@@ -32,9 +30,5 @@ def fbref_table_to_df(
     if parent_fields:
         for parent_field in parent_fields:
             df[parent_field["data_stat"]] = parent_field["data_value"]
-
-    # Set data types of columns in dataframe
-    df = set_df_dtypes(df)
-    df = fill_df_missing_values(df)
 
     return df
