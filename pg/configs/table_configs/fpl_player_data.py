@@ -1,4 +1,7 @@
-fpl_player_data = {
+from typing import Any
+
+
+fpl_player_data: dict[str, Any] = {
     "table_name": "fpl_player_data",
     "table_column_configs": [
         {
