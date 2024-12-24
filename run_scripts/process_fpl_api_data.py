@@ -1,10 +1,9 @@
 import pandas as pd
 
 from fpl_api.FPL_API import FPL_API
+from pg.configs.table_configs.fpl_player_data import \
+    fpl_player_data as fpl_player_data_config
 from pg.PG import PG
-from pg.configs.table_configs.fpl_player_data import (
-    fpl_player_data as fpl_player_data_config,
-)
 from utils.clean_cell_data import clean_cell_data
 from utils.fill_df_missing_values import fill_df_missing_values
 from utils.generate_row_ids import generate_row_ids
