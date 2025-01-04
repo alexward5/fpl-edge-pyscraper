@@ -54,5 +54,29 @@ def create_player_view(schema_name: str) -> None:
     )
 
 
+def create_player_matchlog_view(schema_name: str) -> None:
+    pg.create_view(
+        schema=schema_name,
+        view_name="v_player_matchlog",
+        view_query=(
+            "SELECT "
+            "fbref_player_matchlog.round as round,"
+            "v_player_data.fbref_name as fbref_name,"
+            "v_player_data.fpl_player_position as fpl_player_position,"
+            "v_player_data.fpl_player_cost as fpl_player_cost, "
+            "CASE "
+            "WHEN v_player_data.fpl_player_position = 'GK' THEN (fbref_player_matchlog.npxg * 10) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "WHEN v_player_data.fpl_player_position = 'DEF' THEN (fbref_player_matchlog.npxg * 6) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "WHEN v_player_data.fpl_player_position = 'MID' THEN (fbref_player_matchlog.npxg * 5) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "WHEN v_player_data.fpl_player_position = 'FWD' THEN (fbref_player_matchlog.npxg * 4) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "END as calc_fpl_npxp "
+            f"FROM {schema_name}.fbref_player_matchlog fbref_player_matchlog "
+            f"JOIN {schema_name}.v_player_data v_player_data "
+            "ON fbref_player_matchlog.fbref_player_id = v_player_data.fbref_player_id"
+        ),
+    )
+
+
 def create_views(schema_name: str) -> None:
     create_player_view(schema_name=schema_name)
+    create_player_matchlog_view(schema_name=schema_name)
