@@ -18,7 +18,13 @@ class FBRef_Table:
         self._table_rows_raw: list = []
 
         response = requests.get(table_url)
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError:
+            # Retry after 60s if request fails
+            sleep(60)
+            response = requests.get(table_url)
+            response.raise_for_status()
 
         table_html = response.text
 
