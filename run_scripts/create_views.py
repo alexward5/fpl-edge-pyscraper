@@ -12,6 +12,8 @@ def create_player_view(schema_name: str) -> None:
             "cw.fpl_player_id as fpl_player_id,"
             "cw.fbref_player_id as fbref_player_id,"
             "fpl_player_data.code as fpl_player_code,"
+            "fpl_player_data.web_name as fpl_web_name,"
+            "fbref_player_data.team as fbref_team,"
             "CASE "
             "WHEN fpl_player_data.element_type = 1 THEN 'GK' "
             "WHEN fpl_player_data.element_type = 2 THEN 'DEF' "
@@ -25,20 +27,12 @@ def create_player_view(schema_name: str) -> None:
             "fpl_player_data.goals_scored as fpl_goals_scored,"
             "fpl_player_data.assists as fpl_assists,"
             "fpl_player_data.clean_sheets as fpl_clean_sheets,"
-            "fpl_player_data.goals_conceded as fpl_goals_conceded,"
             "fpl_player_data.bonus as fpl_bonus,"
             "fpl_player_data.bps as fpl_bps,"
-            "fpl_player_data.expected_goals_conceded as fpl_expected_goals_conceded,"
-            "fbref_player_data.player as fbref_name,"
-            "fbref_player_data.team as fbref_team,"
-            "fbref_player_data.age as fbref_age,"
             "fbref_player_data.xg as fbref_xg,"
             "fbref_player_data.npxg as fbref_npxg,"
             "fbref_player_data.xg_assist as fbref_xg_assist,"
             "fbref_player_data.npxg_xg_assist as fbref_npxg_xg_assist,"
-            "fbref_player_data.progressive_carries as fbref_progressive_carries,"
-            "fbref_player_data.progressive_passes as fbref_progressive_passes,"
-            "fbref_player_data.progressive_passes_received as fbref_progressive_passes_received, "
             "CASE "
             "WHEN fpl_player_data.element_type = 1 THEN (fbref_player_data.npxg * 10) + (fbref_player_data.npxg_xg_assist * 3) "  # noqa
             "WHEN fpl_player_data.element_type = 2 THEN (fbref_player_data.npxg * 6) + (fbref_player_data.npxg_xg_assist * 3) "  # noqa
@@ -60,19 +54,21 @@ def create_player_matchlog_view(schema_name: str) -> None:
         view_name="v_player_matchlog",
         view_query=(
             "SELECT "
+            "cw.fpl_player_id as fpl_player_id,"
             "fbref_player_matchlog.round as round,"
-            "v_player_data.fbref_name as fbref_name,"
-            "v_player_data.fpl_player_position as fpl_player_position,"
-            "v_player_data.fpl_player_cost as fpl_player_cost, "
+            "fbref_player_matchlog.npxg as fbref_npxg,"
+            "fbref_player_matchlog.xg_assist as fbref_xg_assist,"
             "CASE "
-            "WHEN v_player_data.fpl_player_position = 'GK' THEN (fbref_player_matchlog.npxg * 10) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
-            "WHEN v_player_data.fpl_player_position = 'DEF' THEN (fbref_player_matchlog.npxg * 6) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
-            "WHEN v_player_data.fpl_player_position = 'MID' THEN (fbref_player_matchlog.npxg * 5) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
-            "WHEN v_player_data.fpl_player_position = 'FWD' THEN (fbref_player_matchlog.npxg * 4) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "WHEN fpl_player_data.element_type = 1 THEN (fbref_player_matchlog.npxg * 10) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "WHEN fpl_player_data.element_type = 2 THEN (fbref_player_matchlog.npxg * 6) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "WHEN fpl_player_data.element_type = 3 THEN (fbref_player_matchlog.npxg * 5) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "WHEN fpl_player_data.element_type = 4 THEN (fbref_player_matchlog.npxg * 4) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
             "END as calc_fpl_npxp "
-            f"FROM {schema_name}.fbref_player_matchlog fbref_player_matchlog "
-            f"JOIN {schema_name}.v_player_data v_player_data "
-            "ON fbref_player_matchlog.fbref_player_id = v_player_data.fbref_player_id"
+            f"FROM {schema_name}.fpl_player_data fpl_player_data "
+            f"JOIN {schema_name}.player_id_crosswalk cw "
+            "ON fpl_player_data.fpl_player_id = cw.fpl_player_id "
+            f"JOIN {schema_name}.fbref_player_matchlog fbref_player_matchlog "
+            "ON fbref_player_matchlog.fbref_player_id = cw.fbref_player_id"
         ),
     )
 
