@@ -55,8 +55,12 @@ def create_player_matchlog_view(schema_name: str) -> None:
         view_query=(
             "SELECT "
             "cw.fpl_player_id as fpl_player_id,"
-            "fbref_player_matchlog.round as round,"
-            "fbref_player_matchlog.minutes as minutes,"
+            "fbref_player_matchlog.round as fbref_round,"
+            "fbref_player_matchlog.date as fbref_date,"
+            "fbref_player_matchlog.minutes as fbref_minutes,"
+            "fbref_player_matchlog.shots as fbref_shots,"
+            "fbref_player_matchlog.shots_on_target as fbref_shots_on_target,"
+            "fbref_player_matchlog.xg as fbref_xg,"
             "fbref_player_matchlog.npxg as fbref_npxg,"
             "fbref_player_matchlog.xg_assist as fbref_xg_assist,"
             "CASE "
@@ -64,7 +68,13 @@ def create_player_matchlog_view(schema_name: str) -> None:
             "WHEN fpl_player_data.element_type = 2 THEN (fbref_player_matchlog.npxg * 6) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
             "WHEN fpl_player_data.element_type = 3 THEN (fbref_player_matchlog.npxg * 5) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
             "WHEN fpl_player_data.element_type = 4 THEN (fbref_player_matchlog.npxg * 4) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
-            "END as calc_fpl_npxp "
+            "END as calc_fpl_npxp,"
+            "CASE "
+            "WHEN fpl_player_data.element_type = 1 THEN (fbref_player_matchlog.xg * 10) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "WHEN fpl_player_data.element_type = 2 THEN (fbref_player_matchlog.xg * 6) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "WHEN fpl_player_data.element_type = 3 THEN (fbref_player_matchlog.xg * 5) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "WHEN fpl_player_data.element_type = 4 THEN (fbref_player_matchlog.xg * 4) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
+            "END as calc_fpl_xp "
             f"FROM {schema_name}.fpl_player_data fpl_player_data "
             f"JOIN {schema_name}.player_id_crosswalk cw "
             "ON fpl_player_data.fpl_player_id = cw.fpl_player_id "
