@@ -55,6 +55,7 @@ def create_player_matchlog_view(schema_name: str) -> None:
         view_query=(
             "SELECT "
             "cw.fpl_player_id as fpl_player_id,"
+            "cw.fbref_team as fbref_team,"
             "fbref_player_matchlog.round as fbref_round,"
             "fbref_player_matchlog.date as fbref_date,"
             "fbref_player_matchlog.minutes as fbref_minutes,"

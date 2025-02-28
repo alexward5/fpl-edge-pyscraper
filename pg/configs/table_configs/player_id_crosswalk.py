@@ -21,5 +21,10 @@ player_id_crosswalk = {
             "column_type": "VARCHAR (255)",
             "not_null": True,
         },
+        {
+            "column_name": "fbref_team",
+            "column_type": "VARCHAR (255)",
+            "not_null": True,
+        },
     ],
 }
