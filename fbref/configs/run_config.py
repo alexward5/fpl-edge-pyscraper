@@ -77,5 +77,11 @@ fbref_team_data_config: dict[str, Any] = {
         "row_filters": [
             {"column_name": "comp", "comparison": "!=", "value": "Premier League"}
         ],
+        "column_transforms": [
+            {
+                "column_name": "round",
+                "transform": "lambda x: x.split('Matchweek ')[1]",
+            }
+        ],
     },
 }
