@@ -1,0 +1,38 @@
+fbref_team_scores_and_fixtures = {
+    "table_name": "fbref_team_scores_and_fixtures",
+    "table_column_configs": [
+        {"column_name": "date", "column_type": "VARCHAR (255)", "not_null": True},
+        {"column_name": "start_time", "column_type": "VARCHAR (255)", "not_null": True},
+        {"column_name": "comp", "column_type": "VARCHAR (255)", "not_null": True},
+        {"column_name": "round", "column_type": "VARCHAR (255)", "not_null": True},
+        {"column_name": "dayofweek", "column_type": "VARCHAR (255)", "not_null": True},
+        {"column_name": "venue", "column_type": "VARCHAR (255)", "not_null": True},
+        {"column_name": "result", "column_type": "VARCHAR (255)", "not_null": True},
+        {"column_name": "goals_for", "column_type": "INT", "not_null": True},
+        {"column_name": "goals_against", "column_type": "INT", "not_null": True},
+        {"column_name": "opponent", "column_type": "VARCHAR (255)", "not_null": True},
+        {"column_name": "xg_for", "column_type": "DECIMAL", "not_null": True},
+        {"column_name": "xg_against", "column_type": "DECIMAL", "not_null": True},
+        {"column_name": "possession", "column_type": "INT", "not_null": True},
+        {"column_name": "attendance", "column_type": "INT", "not_null": True},
+        {"column_name": "captain", "column_type": "VARCHAR (255)", "not_null": True},
+        {"column_name": "formation", "column_type": "VARCHAR (255)", "not_null": True},
+        {
+            "column_name": "opp_formation",
+            "column_type": "VARCHAR (255)",
+            "not_null": True,
+        },
+        {"column_name": "referee", "column_type": "VARCHAR (255)", "not_null": True},
+        {
+            "column_name": "match_report",
+            "column_type": "VARCHAR (255)",
+            "not_null": True,
+        },
+        {"column_name": "team", "column_type": "VARCHAR (255)", "not_null": True},
+        {
+            "column_name": "fbref_team_id",
+            "column_type": "VARCHAR (255)",
+            "not_null": True,
+        },
+    ],
+}
