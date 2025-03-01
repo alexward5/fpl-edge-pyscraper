@@ -1,6 +1,6 @@
 from typing import Any
 
-fbref_table_config: dict[str, Any] = {
+fbref_player_data_config: dict[str, Any] = {
     "table_name": "fbref_team_overall",
     "table_url": "https://fbref.com/en/comps/9/Premier-League-Stats",
     "table_index": 0,
@@ -50,5 +50,32 @@ fbref_table_config: dict[str, Any] = {
                 }
             ],
         },
+    },
+}
+
+fbref_team_data_config: dict[str, Any] = {
+    "table_name": "fbref_team_overall",
+    "table_url": "https://fbref.com/en/comps/9/Premier-League-Stats",
+    "table_index": 0,
+    "header_row_index": 0,
+    "row_id_config": {
+        "column_name": "fbref_team_id",
+        "row_id_input_fields": ["team"],
+    },
+    "filtered_columns": ["last_5", "notes"],
+    "child_table_config": {
+        "table_name": "fbref_team_scores_and_fixtures",
+        "table_index": 1,
+        "header_row_index": 0,
+        "row_id_config": {
+            "column_name": "fbref_team_id",
+            "row_id_input_fields": ["date", "team"],
+        },
+        "hyperlink_data_stat": "team",
+        "include_parent_fields": ["team"],
+        "filtered_columns": ["notes"],
+        "row_filters": [
+            {"column_name": "comp", "comparison": "!=", "value": "Premier League"}
+        ],
     },
 }

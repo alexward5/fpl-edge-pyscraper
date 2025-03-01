@@ -1,4 +1,4 @@
-from fbref.configs.run_config import fbref_table_config
+from fbref.configs.run_config import fbref_player_data_config
 from run_scripts.create_schema_and_tables import create_schema_and_tables
 from run_scripts.create_views import create_views
 from run_scripts.generate_player_crosswalk import generate_player_crosswalk
@@ -19,8 +19,8 @@ if CREATE_SCHEMA_AND_TABLES:
 if PROCESS_FBREF_TABLES:
     process_fbref_table(
         schema_name=SCHEMA_NAME,
-        table_url=fbref_table_config["table_url"],
-        fbref_table_config=fbref_table_config,
+        table_url=fbref_player_data_config["table_url"],
+        fbref_table_config=fbref_player_data_config,
     )
 
 if PROCESS_FPL_API_DATA:
