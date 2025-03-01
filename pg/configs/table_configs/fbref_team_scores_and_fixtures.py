@@ -4,7 +4,7 @@ fbref_team_scores_and_fixtures = {
         {"column_name": "date", "column_type": "VARCHAR (255)", "not_null": True},
         {"column_name": "start_time", "column_type": "VARCHAR (255)", "not_null": True},
         {"column_name": "comp", "column_type": "VARCHAR (255)", "not_null": True},
-        {"column_name": "round", "column_type": "VARCHAR (255)", "not_null": True},
+        {"column_name": "round", "column_type": "INT", "not_null": True},
         {"column_name": "dayofweek", "column_type": "VARCHAR (255)", "not_null": True},
         {"column_name": "venue", "column_type": "VARCHAR (255)", "not_null": True},
         {"column_name": "result", "column_type": "VARCHAR (255)", "not_null": True},
