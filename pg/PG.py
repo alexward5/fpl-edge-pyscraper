@@ -55,19 +55,27 @@ class PG:
         table_name: str,
         column_names: list[Any],
         row_values: list[Any],
+        update_on: Optional[str] = None,
     ):
         with self.conn.cursor() as cur:
             column_names_joined = ",".join(column_names)
             row_values_joined = ", ".join(f"'{val}'" for val in row_values)
 
+            if update_on:
+                on_conflict = f"ON CONFLICT ({update_on}) DO UPDATE SET {', '.join([f'{col} = EXCLUDED.{col}' for col in column_names if col != update_on])}"  # noqa
+
+            else:
+                on_conflict = "ON CONFLICT DO NOTHING"
+
             cur.execute(
                 sql.SQL(
-                    "INSERT INTO {schema}.{table_name}({column_names}) VALUES ({row_values}) ON CONFLICT DO NOTHING"
+                    "INSERT INTO {schema}.{table_name}({column_names}) VALUES ({row_values}) {on_conflict}"  # noqa
                 ).format(
                     schema=sql.Identifier(schema),
                     table_name=sql.Identifier(table_name),
                     column_names=sql.SQL(column_names_joined),
                     row_values=sql.SQL(row_values_joined),  # type: ignore
+                    on_conflict=sql.SQL(on_conflict),
                 ),
             )
 

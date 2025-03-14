@@ -56,6 +56,7 @@ def process_fbref_table(
             table_name=fbref_table_config["table_name"],
             column_names=fbref_table_df.columns.to_list(),
             row_values=row.to_list(),
+            update_on=fbref_table_config["row_id_config"]["column_name"],
         )
 
     # If child table config is set, recursively process child tables
