@@ -84,6 +84,22 @@ def create_player_matchlog_view(schema_name: str) -> None:
     )
 
 
+def create_team_matchlog_view(schema_name: str) -> None:
+    pg.create_view(
+        schema=schema_name,
+        view_name="v_team_matchlog",
+        view_query=(
+            "SELECT "
+            "fbref_team_scores_and_fixtures.team as fbref_team,"
+            "fbref_team_scores_and_fixtures.date as fbref_date,"
+            "fbref_team_scores_and_fixtures.round as fbref_round "
+            f"FROM {schema_name}.fbref_team_scores_and_fixtures fbref_team_scores_and_fixtures "
+            "WHERE result IS NOT NULL AND result <> ''"
+        ),
+    )
+
+
 def create_views(schema_name: str) -> None:
     create_player_view(schema_name=schema_name)
     create_player_matchlog_view(schema_name=schema_name)
+    create_team_matchlog_view(schema_name=schema_name)
