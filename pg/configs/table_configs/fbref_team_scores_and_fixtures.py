@@ -1,6 +1,11 @@
 fbref_team_scores_and_fixtures = {
     "table_name": "fbref_team_scores_and_fixtures",
     "table_column_configs": [
+        {
+            "column_name": "fbref_team_id",
+            "column_type": "VARCHAR (255)",
+            "primary_key": True,
+        },
         {"column_name": "date", "column_type": "VARCHAR (255)", "not_null": True},
         {"column_name": "start_time", "column_type": "VARCHAR (255)", "not_null": True},
         {"column_name": "comp", "column_type": "VARCHAR (255)", "not_null": True},
@@ -29,10 +34,5 @@ fbref_team_scores_and_fixtures = {
             "not_null": True,
         },
         {"column_name": "team", "column_type": "VARCHAR (255)", "not_null": True},
-        {
-            "column_name": "fbref_team_id",
-            "column_type": "VARCHAR (255)",
-            "not_null": True,
-        },
     ],
 }
