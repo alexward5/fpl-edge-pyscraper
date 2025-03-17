@@ -69,7 +69,7 @@ fbref_team_data_config: dict[str, Any] = {
         "header_row_index": 0,
         "row_id_config": {
             "column_name": "fbref_team_id",
-            "row_id_input_fields": ["date", "team"],
+            "row_id_input_fields": ["round", "team"],
         },
         "hyperlink_data_stat": "team",
         "include_parent_fields": ["team"],
