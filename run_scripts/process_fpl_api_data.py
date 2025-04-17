@@ -1,8 +1,9 @@
 import pandas as pd
 
 from fpl_api.FPL_API import FPL_API
-from pg.configs.table_configs.fpl_player_data import \
-    fpl_player_data as fpl_player_data_config
+from pg.configs.table_configs.fpl_player_data import (
+    fpl_player_data as fpl_player_data_config,
+)
 from pg.PG import PG
 from utils.clean_cell_data import clean_cell_data
 from utils.fill_df_missing_values import fill_df_missing_values
@@ -44,4 +45,5 @@ def process_fpl_api_data(schema_name: str) -> None:
             table_name="fpl_player_data",
             column_names=fpl_players_df.columns.to_list(),
             row_values=cleaned_row_values,
+            update_on="fpl_player_id",
         )
