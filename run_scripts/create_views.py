@@ -63,6 +63,7 @@ def create_player_matchlog_view(schema_name: str) -> None:
             "fbref_player_matchlog.xg as fbref_xg,"
             "fbref_player_matchlog.npxg as fbref_npxg,"
             "fbref_player_matchlog.xg_assist as fbref_xg_assist,"
+            "fpl_player_gameweek_data.round as fpl_gameweek,"
             "CASE "
             "WHEN fpl_player_data.element_type = 1 THEN (fbref_player_matchlog.npxg * 10) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
             "WHEN fpl_player_data.element_type = 2 THEN (fbref_player_matchlog.npxg * 6) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
@@ -79,7 +80,9 @@ def create_player_matchlog_view(schema_name: str) -> None:
             f"JOIN {schema_name}.player_id_crosswalk cw "
             "ON fpl_player_data.fpl_player_id = cw.fpl_player_id "
             f"JOIN {schema_name}.fbref_player_matchlog fbref_player_matchlog "
-            "ON fbref_player_matchlog.fbref_player_id = cw.fbref_player_id"
+            "ON fbref_player_matchlog.fbref_player_id = cw.fbref_player_id "
+            f"JOIN {schema_name}.fpl_player_gameweek_data fpl_player_gameweek_data "
+            "ON fpl_player_gameweek_data.fpl_player_id = cw.fpl_player_id AND fpl_player_gameweek_data.fpl_match_date = fbref_player_matchlog.date"  # noqa
         ),
     )
 
