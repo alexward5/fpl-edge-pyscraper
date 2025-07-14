@@ -6,7 +6,6 @@ pg = PG(dbname="postgres", user="postgres")
 
 
 def create_schema_and_tables(schema_name: str):
-    pg.drop_schema(schema_name)
     pg.create_schema(schema_name)
 
     for table_config in list(table_configs_merged.values()):
