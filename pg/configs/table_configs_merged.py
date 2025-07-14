@@ -9,6 +9,9 @@ from pg.configs.table_configs.fbref_team_scores_and_fixtures import (
     fbref_team_scores_and_fixtures,
 )
 from pg.configs.table_configs.fpl_player_data import fpl_player_data
+from pg.configs.table_configs.fpl_player_gameweek_data import (
+    fpl_player_gameweek_data,
+)
 from pg.configs.table_configs.player_id_crosswalk import player_id_crosswalk
 
 table_configs_merged: dict[str, Any] = {
@@ -17,5 +20,6 @@ table_configs_merged: dict[str, Any] = {
     "fbref_player_matchlog": fbref_player_matchlog,
     "fbref_team_scores_and_fixtures": fbref_team_scores_and_fixtures,
     "fpl_player_data": fpl_player_data,
+    "fpl_player_gameweek_data": fpl_player_gameweek_data,
     "player_id_crosswalk": player_id_crosswalk,
 }
