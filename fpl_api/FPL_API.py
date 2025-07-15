@@ -14,6 +14,7 @@ class FPL_API:
         self.player_id_mapping: dict = {}
         self.player_data: list = []
         self.player_gameweek_data: list = []
+        self.events_data: list = []
 
         self._api_response_raw = {}
 
@@ -29,10 +30,10 @@ class FPL_API:
 
         # Check that fpl season data exists before proceeding
         if self._api_response_raw.get("events"):
+            self.events_data = self._api_response_raw["events"]
             self._create_team_id_mapping()
             self._create_player_id_mapping()
             self._parse_player_data()
-            self._parse_player_gameweek_data()
 
     def _create_team_id_mapping(self) -> None:
         # Map fpl team ids to fbref team names
@@ -75,7 +76,7 @@ class FPL_API:
 
         self.player_data = players
 
-    def _parse_player_gameweek_data(self) -> None:
+    def get_player_gameweek_data(self) -> list:
         player_ids = list(self.player_id_mapping.keys())
 
         for player_id in player_ids:
@@ -89,3 +90,5 @@ class FPL_API:
 
             for gw in response.json()["history"]:
                 self.player_gameweek_data.append(gw)
+
+        return self.player_gameweek_data
