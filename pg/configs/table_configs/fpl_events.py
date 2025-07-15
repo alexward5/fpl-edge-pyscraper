@@ -1,10 +1,20 @@
-fpl_events = {
+from typing import Any
+
+fpl_events: dict[str, Any] = {
     "table_name": "fpl_events",
     "table_column_configs": [
         {"column_name": "id", "column_type": "INT", "primary_key": True},
         {"column_name": "name", "column_type": "VARCHAR(255)", "not_null": True},
-        {"column_name": "deadline_time", "column_type": "TIMESTAMP", "not_null": True},
-        {"column_name": "release_time", "column_type": "TIMESTAMP", "not_null": False},
+        {
+            "column_name": "deadline_time",
+            "column_type": "VARCHAR(255)",
+            "not_null": True,
+        },
+        {
+            "column_name": "release_time",
+            "column_type": "VARCHAR(255)",
+            "not_null": False,
+        },
         {"column_name": "average_entry_score", "column_type": "INT", "not_null": True},
         {"column_name": "finished", "column_type": "BOOLEAN", "not_null": True},
         {"column_name": "data_checked", "column_type": "BOOLEAN", "not_null": True},
