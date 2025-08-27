@@ -27,7 +27,7 @@ def process_fpl_player_data(schema_name: str) -> None:
 
     fpl_players_df = pd.DataFrame.from_records(fpl_api_data.player_data)
 
-    fpl_players_df["fbref_team_name"] = fpl_players_df["id"].map(
+    fpl_players_df["fbref_team_name"] = fpl_players_df["team"].map(
         fpl_api_data.team_id_mapping
     )
 
@@ -151,5 +151,5 @@ def process_fpl_events(schema_name: str) -> None:
 
 def process_fpl_api_data(schema_name: str) -> None:
     process_fpl_player_data(schema_name=schema_name)
-    process_fpl_player_gameweek_data(schema_name=schema_name)
-    process_fpl_events(schema_name=schema_name)
+    # process_fpl_player_gameweek_data(schema_name=schema_name)
+    # process_fpl_events(schema_name=schema_name)
