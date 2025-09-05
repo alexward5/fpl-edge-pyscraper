@@ -64,6 +64,11 @@ def create_player_matchlog_view(schema_name: str) -> None:
             "fbref_player_matchlog.npxg as fbref_npxg,"
             "fbref_player_matchlog.xg_assist as fbref_xg_assist,"
             "fpl_player_gameweek_data.round as fpl_gameweek,"
+            "fpl_player_gameweek_data.total_points as fpl_total_points,"
+            "fpl_player_gameweek_data.goals_scored as fpl_goals_scored,"
+            "fpl_player_gameweek_data.assists as fpl_assists,"
+            "fpl_player_gameweek_data.clean_sheets as fpl_clean_sheet,"
+            "fpl_player_gameweek_data.bps as fpl_bps,"
             "CASE "
             "WHEN fpl_player_data.element_type = 1 THEN (fbref_player_matchlog.npxg * 10) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
             "WHEN fpl_player_data.element_type = 2 THEN (fbref_player_matchlog.npxg * 6) + (fbref_player_matchlog.xg_assist * 3) "  # noqa
