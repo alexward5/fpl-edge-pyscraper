@@ -1,8 +1,7 @@
-from time import sleep
 from typing import Any
 
-import requests
 from bs4 import BeautifulSoup
+from utils.fetch_fbref_html import fetch_fbref_html
 
 
 class FBRef_Table:
@@ -17,26 +16,16 @@ class FBRef_Table:
 
         self._table_rows_raw: list = []
 
-        response = requests.get(table_url)
-        try:
-            response.raise_for_status()
-        except requests.exceptions.HTTPError:
-            # Retry after 60s if request fails
-            sleep(60)
-            response = requests.get(table_url)
-            response.raise_for_status()
+        table_html = fetch_fbref_html(table_url)
 
-        table_html = response.text
+        soup = BeautifulSoup(table_html, "lxml")
 
-        # Sleep for 10s to avoid reaching rate limit
-        sleep(10)
-
-        soup = BeautifulSoup(table_html, "html.parser")
+        table = soup.select("table.stats_table")[self.table_config["table_index"]]
+        table_rows = table.find_all("tr")
 
         # Check that table exists in html before proceeding
-        if soup.find_all("table"):
-            table_index = self.table_config["table_index"]
-            self._table_rows_raw = soup.find_all("table")[table_index].find_all("tr")
+        if table_rows:
+            self._table_rows_raw = table_rows
 
             self._parse_headers()
             self._parse_table()
