@@ -33,7 +33,18 @@ def fetch_fbref_html(table_url) -> str:
         except PlaywrightTimeoutError:
             print("Warning: Timeout while loading page or waiting for table")
 
-        html = page.content()
+        # Try to make sure navigation is settled before grabbing content
+        try:
+            try:
+                page.wait_for_load_state("load", timeout=10_000)
+            except PlaywrightTimeoutError:
+                pass
+
+            html = page.content()
+
+        except Exception as e:
+            print(f"Error while retrieving page content: {e}")
+            html = ""
 
         browser.close()
         return html
