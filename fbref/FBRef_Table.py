@@ -1,7 +1,7 @@
 from typing import Any
 
 from bs4 import BeautifulSoup
-from fbref.helpers.fetch_fbref_html import fetch_html
+from fbref.helpers.fetch_html import fetch_html
 
 
 class FBRef_Table:
