@@ -1,7 +1,7 @@
 from typing import Any
 
 from bs4 import BeautifulSoup
-from fbref.helpers.fetch_fbref_html import fetch_fbref_html
+from fbref.helpers.fetch_fbref_html import fetch_html
 
 
 class FBRef_Table:
@@ -16,7 +16,7 @@ class FBRef_Table:
 
         self._table_rows_raw: list = []
 
-        table_html = fetch_fbref_html(table_url)
+        table_html = fetch_html(table_url)
 
         soup = BeautifulSoup(table_html, "lxml")
 

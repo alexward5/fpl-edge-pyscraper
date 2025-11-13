@@ -2,7 +2,7 @@ from time import sleep
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 
-def fetch_fbref_html(table_url) -> str:
+def _fetch_html(table_url) -> str:
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
 
@@ -28,23 +28,31 @@ def fetch_fbref_html(table_url) -> str:
             sleep(10)
 
             # Wait for stats table html to render
-            page.wait_for_selector("table.stats_table", timeout=30_000)
+            page.wait_for_selector("table.stats_table", timeout=10_000)
 
         except PlaywrightTimeoutError:
-            print("Warning: Timeout while loading page or waiting for table")
+            pass
 
-        # Try to make sure navigation is settled before grabbing content
         try:
-            try:
-                page.wait_for_load_state("load", timeout=10_000)
-            except PlaywrightTimeoutError:
-                pass
-
             html = page.content()
-
         except Exception as e:
             print(f"Error while retrieving page content: {e}")
             html = ""
 
         browser.close()
         return html
+
+
+def fetch_html(table_url, retries=1) -> str:
+    for attempt in range(retries):
+        html = _fetch_html(table_url)
+        if html:
+            return html
+
+        print(f"Retrying fetch... Attempt {attempt + 1} of {retries}")
+
+        sleep(60)
+
+    print("Failed to fetch HTML")
+
+    return ""
