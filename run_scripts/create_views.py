@@ -4,9 +4,9 @@ pg = PG(dbname="postgres", user="postgres")
 
 
 def create_player_view(schema_name: str) -> None:
-    pg.create_view(
+    pg.create_materialized_view(
         schema=schema_name,
-        view_name="v_player_data",
+        view_name="mv_player_data",
         view_query=(
             "SELECT "
             "cw.fpl_player_id as fpl_player_id,"
@@ -49,9 +49,9 @@ def create_player_view(schema_name: str) -> None:
 
 
 def create_player_matchlog_view(schema_name: str) -> None:
-    pg.create_view(
+    pg.create_materialized_view(
         schema=schema_name,
-        view_name="v_player_matchlog",
+        view_name="mv_player_matchlog",
         view_query=(
             "SELECT "
             "cw.fpl_player_id as fpl_player_id,"
@@ -94,9 +94,9 @@ def create_player_matchlog_view(schema_name: str) -> None:
 
 
 def create_team_matchlog_view(schema_name: str) -> None:
-    pg.create_view(
+    pg.create_materialized_view(
         schema=schema_name,
-        view_name="v_team_matchlog",
+        view_name="mv_team_matchlog",
         view_query=(
             "SELECT "
             "fbref_team_scores_and_fixtures.team as fbref_team,"
