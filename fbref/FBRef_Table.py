@@ -16,7 +16,7 @@ class FBRef_Table:
 
         self._table_rows_raw: list = []
 
-        table_html = fetch_html(table_url)
+        table_html = fetch_html(table_url, retries=3)
 
         soup = BeautifulSoup(table_html, "lxml")
 
