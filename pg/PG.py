@@ -161,3 +161,36 @@ class PG:
             )
 
             self.conn.commit()
+
+    def create_index(
+        self,
+        schema: str,
+        table_name: str,
+        index_name: str,
+        columns: list[str],
+    ) -> None:
+        with self.conn.cursor() as cur:
+            cur.execute(
+                sql.SQL("DROP INDEX IF EXISTS {schema}.{index_name}").format(
+                    schema=sql.Identifier(schema),
+                    index_name=sql.Identifier(index_name),
+                ),
+            )
+
+            columns_identifiers = sql.SQL(", ").join(
+                sql.Identifier(col) for col in columns
+            )
+
+            cur.execute(
+                sql.SQL(
+                    "CREATE INDEX {index_name} ON {schema}.{table_name} ({columns})"
+                ).format(
+                    index_name=sql.Identifier(index_name),
+                    schema=sql.Identifier(schema),
+                    table_name=sql.Identifier(table_name),
+                    columns=columns_identifiers,
+                ),
+            )
+
+            self.conn.commit()
+            print(f"Created index: {index_name}")
