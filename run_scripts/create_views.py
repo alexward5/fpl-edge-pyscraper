@@ -47,6 +47,13 @@ def create_player_view(schema_name: str) -> None:
         ),
     )
 
+    pg.create_index(
+        schema=schema_name,
+        table_name="mv_player_data",
+        index_name="idx_mv_player_data_fpl_player_id",
+        columns=["fpl_player_id"],
+    )
+
 
 def create_player_matchlog_view(schema_name: str) -> None:
     pg.create_materialized_view(
@@ -90,6 +97,13 @@ def create_player_matchlog_view(schema_name: str) -> None:
             f"JOIN {schema_name}.fpl_player_gameweek_data fpl_player_gameweek_data "
             "ON fpl_player_gameweek_data.fpl_player_id = cw.fpl_player_id AND fpl_player_gameweek_data.fpl_match_date = fbref_player_matchlog.date"  # noqa
         ),
+    )
+
+    pg.create_index(
+        schema=schema_name,
+        table_name="mv_player_matchlog",
+        index_name="idx_mv_player_matchlog_fpl_player_id",
+        columns=["fpl_player_id"],
     )
 
 
