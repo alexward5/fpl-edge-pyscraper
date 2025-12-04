@@ -34,6 +34,18 @@ class PG:
             self.conn.commit()
             print(f"Created schema: {schema_name}")
 
+    def drop_table(self, schema: str, table_name: str):
+        with self.conn.cursor() as cur:
+            cur.execute(
+                sql.SQL("DROP TABLE IF EXISTS {schema}.{table_name} CASCADE").format(
+                    schema=sql.Identifier(schema),
+                    table_name=sql.Identifier(table_name),
+                ),
+            )
+
+            self.conn.commit()
+            print(f"Dropped table: {table_name}")
+
     def create_table(self, schema: str, table_name: str, columns: list[Any]):
         with self.conn.cursor() as cur:
             cur.execute(

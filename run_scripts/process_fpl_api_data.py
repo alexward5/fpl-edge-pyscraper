@@ -8,6 +8,7 @@ from pg.configs.table_configs.fpl_player_gameweek_data import (
     fpl_player_gameweek_data as fpl_player_gameweek_data_config,
 )
 from pg.configs.table_configs.fpl_events import fpl_events as fpl_events_config
+from pg.helpers.build_column_sql import build_column_sql
 from pg.PG import PG
 from utils.clean_cell_data import clean_cell_data
 from utils.fill_df_missing_values import fill_df_missing_values
@@ -18,6 +19,17 @@ pg = PG(dbname="postgres", user="postgres")
 
 
 def process_fpl_player_data(schema_name: str) -> None:
+    # Drop and recreate table
+    pg.drop_table(schema=schema_name, table_name=fpl_player_data_config["table_name"])
+    pg.create_table(
+        schema=schema_name,
+        table_name=fpl_player_data_config["table_name"],
+        columns=[
+            build_column_sql(column_config)
+            for column_config in fpl_player_data_config["table_column_configs"]
+        ],
+    )
+
     fpl_player_data_column_configs = fpl_player_data_config["table_column_configs"]
     fpl_player_data_column_names = [
         column_config["column_name"] for column_config in fpl_player_data_column_configs
@@ -58,6 +70,19 @@ def process_fpl_player_data(schema_name: str) -> None:
 
 
 def process_fpl_player_gameweek_data(schema_name: str) -> None:
+    # Drop and recreate table
+    pg.drop_table(
+        schema=schema_name, table_name=fpl_player_gameweek_data_config["table_name"]
+    )
+    pg.create_table(
+        schema=schema_name,
+        table_name=fpl_player_gameweek_data_config["table_name"],
+        columns=[
+            build_column_sql(column_config)
+            for column_config in fpl_player_gameweek_data_config["table_column_configs"]
+        ],
+    )
+
     fpl_player_gameweek_data_column_configs = fpl_player_gameweek_data_config[
         "table_column_configs"
     ]
@@ -120,6 +145,17 @@ def process_fpl_player_gameweek_data(schema_name: str) -> None:
 
 
 def process_fpl_events(schema_name: str) -> None:
+    # Drop and recreate table
+    pg.drop_table(schema=schema_name, table_name=fpl_events_config["table_name"])
+    pg.create_table(
+        schema=schema_name,
+        table_name=fpl_events_config["table_name"],
+        columns=[
+            build_column_sql(column_config)
+            for column_config in fpl_events_config["table_column_configs"]
+        ],
+    )
+
     fpl_events_column_configs = fpl_events_config["table_column_configs"]
     fpl_events_column_names = [
         column_config["column_name"] for column_config in fpl_events_column_configs
