@@ -96,6 +96,7 @@ def generate_player_crosswalk(schema_name: str) -> None:
                     )
 
                     if not fbref_player_dict:
+                        continue
                         raise ValueError(
                             f"Unable to find matching FBRef player for FPL name: {fpl_player_name}"
                         )
