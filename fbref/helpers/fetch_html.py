@@ -17,7 +17,7 @@ def fetch_html(table_url, retries=3) -> str:
             response = scraper.get(table_url)
 
             if response.status_code == 200:
-                sleep(10)  # Sleep for 10s to avoid reaching rate limit
+                sleep(8)  # Sleep for 8s to avoid reaching rate limit
                 return response.text
 
             print(f"Failed with status {response.status_code}. Retrying...")
