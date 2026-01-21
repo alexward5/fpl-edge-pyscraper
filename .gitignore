@@ -3,3 +3,4 @@
 todo
 .vs-playwright-profile
 .DS_Store
+testing/*
