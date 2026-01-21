@@ -6,9 +6,9 @@ from run_scripts.generate_player_crosswalk import generate_player_crosswalk
 from run_scripts.process_fbref_table import process_fbref_table
 from run_scripts.process_fpl_api_data import process_fpl_api_data
 
-SCHEMA_NAME = "test_schema"
+SCHEMA_NAME = "test_schema_2025"
 
-CREATE_SCHEMA_AND_TABLES = True
+CREATE_SCHEMA_AND_TABLES = False
 PROCESS_FBREF_PLAYER_DATA = True
 PROCESS_FBREF_TEAM_DATA = True
 PROCESS_FPL_API_DATA = True
