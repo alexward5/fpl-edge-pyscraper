@@ -1,26 +1,38 @@
+import os
 from time import sleep
-import cloudscraper  # type: ignore
+
+from dotenv import load_dotenv
+from zenrows import ZenRowsClient  # type: ignore
+
+load_dotenv(".env.local")
+
+ZENROWS_API_KEY = os.getenv("ZENROWS_API_KEY", "")
+ZENROWS_PARAMS = {
+    "antibot": "true",
+    "wait_for": "table.stats_table",
+    "premium_proxy": "true",
+    "proxy_country": "us",
+}
 
 
-def fetch_html(table_url, retries=3) -> str:
-    # Create a cloudscraper instance with browser emulation
-    scraper = cloudscraper.create_scraper(
-        browser={
-            "browser": "chrome",
-            "platform": "darwin",
-            "mobile": False,
-        }
-    )
+def fetch_html(table_url: str, retries: int = 3) -> str:
+    if not ZENROWS_API_KEY:
+        print("ZENROWS_API_KEY is not set")
+        return ""
+
+    client = ZenRowsClient(ZENROWS_API_KEY)
 
     for attempt in range(retries):
         try:
-            response = scraper.get(table_url)
+            response = client.get(table_url, params=ZENROWS_PARAMS)
 
-            if response.status_code == 200:
-                sleep(8)  # Sleep for 8s to avoid reaching rate limit
+            if response.status_code != 200:
+                print(f"Failed with status {response.status_code}. Retrying...")
+            elif "table" not in response.text:
+                print("Response missing expected content. Retrying...")
+            else:
+                sleep(8)  # Avoid rate limit
                 return response.text
-
-            print(f"Failed with status {response.status_code}. Retrying...")
 
         except Exception as e:
             print(f"Error while retrieving page content: {e}")
